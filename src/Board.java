@@ -41,41 +41,6 @@ public abstract class Board {
 	}
 	
 	/*
-	 * Return a string of the board
-	 */
-	@Override
-	public String toString() {
-		final String ANSI_RESET = "\033[0m";
-		final String ANSI_BLUE = "\033[0;34m";
-		final String ANSI_YELLOW = "\033[0;33m";
-		String board = "";
-		for (int i = 0; i < this.row; i++) {
-			for (int j = 0; j < this.col; j++) {
-				board = board + "+---";
-			}
-			board = board + "+\n";
-			
-			for (int j = 0; j < this.col; j++) {
-				if (this.board[i][j].hasHero()) {
-					board = board + "| "+ ANSI_BLUE + "H" + ANSI_RESET + " ";
-				}
-				else if (this.board[i][j].getMark() == 'M') {
-					board = board + "| "+ ANSI_YELLOW + this.board[i][j].getMark() + ANSI_RESET + " ";
-				}
-				else {
-					board = board + "| " + this.board[i][j].getMark() + " ";
-				}
-			}
-			board = board + "|\n";
-		}
-		for (int j = 0; j < this.col; j++) {
-			board = board + "+---";
-		}
-		board = board + "+\n";
-		return board;
-	}
-	
-	/*
 	 * PreCondition:  index i, j for the position of a tile
 	 * PostCondition: the symbol of the corresponding tile
 	 */

@@ -10,11 +10,11 @@ public abstract class RolePlayingGame {
 	public void initialize(List<Hero> heros, int boardSize) {
 		this.heros = heros;
 		world = new LegendBoard(boardSize);
-		world.initializeHero(this.heros);
+		world.initializeHeroNMonster(this.heros);
 	}
 	
 	public abstract void run();
-	public abstract int fight(CommonTile tile);
+	public abstract int fight(Plain tile);
 	
 	public int move(char direction) {
 		return this.world.move(direction);

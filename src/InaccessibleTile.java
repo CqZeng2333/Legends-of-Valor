@@ -2,7 +2,9 @@
 public class InaccessibleTile extends Tile {
 
 	public InaccessibleTile() {
-		super(false, 'x', false, "inaccessible_tile");
+		super(false, 'I', "inaccessible_tile");
+		this.setContainer(0, -2);
+		this.setContainer(1, -2);
 	}
 	
 }

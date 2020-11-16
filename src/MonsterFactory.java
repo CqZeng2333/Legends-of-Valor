@@ -66,6 +66,19 @@ public class MonsterFactory {
 		}
 	}
 	
+	public String getTypeForMonster(String name) {
+		for (String s: dragon.keySet()) {
+			if (s.equals(name)) return "dragon";
+		}
+		for (String s: exoskeleton.keySet()) {
+			if (s.equals(name)) return "exoskeleton";
+		}
+		for (String s: spirit.keySet()) {
+			if (s.equals(name)) return "spirit";
+		}
+		return null;
+	}
+	
 	/*
 	 * Produce a monster according to the monster type and name
 	 */
@@ -92,6 +105,7 @@ public class MonsterFactory {
 	 */
 	public Monster createMonsterWithLevel(int level) {
 		Monster monster = null;
+		if (level > 10) level = 10; // monster level not over 10
 		List<String> mList = this.monsterWithLevel.get(level);
 		int i = (int) (Math.random() * mList.size());
 		String name = mList.get(i);

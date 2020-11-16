@@ -64,7 +64,7 @@ public class HeroFactory {
 	/*
 	 * Produce an hero according to the hero type and name
 	 */
-	public Hero createBuyableObject(String type, String name) {
+	public Hero createHero(String type, String name) {
 		Hero hero = null;
 		Map<String, Integer> attr;
 		if (type.equals("warrior")) {

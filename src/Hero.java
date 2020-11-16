@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public abstract class Hero {
+public abstract class Hero extends Avatar {
 	private String name;
 	private int mana;
 	private Map<String, Double> skills;
@@ -91,7 +91,7 @@ public abstract class Hero {
 	public int revive() {
 		if (this.isAlive == false) {
 			this.isAlive = true;
-			this.HP = 50 * level;
+			this.HP = 100 * level;
 			return 0;
 		}
 		else return -1;

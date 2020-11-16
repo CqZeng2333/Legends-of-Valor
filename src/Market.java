@@ -3,7 +3,7 @@ public class Market extends AccessibleTile {
 	private BuyableFactory bf;
 	
 	public Market() {
-		super('M', false, "market");
+		super('M', "market");
 		bf = new BuyableFactory();
 	}
 
@@ -11,16 +11,6 @@ public class Market extends AccessibleTile {
 		BuyableObject bo = bf.createBuyableObject(type, name);
 		if (bo.buyable(level, money) > 0) return bo;
 		else return null;
-	}
-	
-	@Override
-	public int stepOn(int numOfHero, int level) {
-		this.setHasHero(true);
-		return 0;
-	}
-	@Override
-	public void moveOut() {
-		this.setHasHero(false);
 	}
 	
 	public String displayObject() {

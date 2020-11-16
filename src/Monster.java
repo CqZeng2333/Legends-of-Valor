@@ -3,7 +3,7 @@
  */
 import java.util.Random;
 
-public abstract class Monster {
+public abstract class Monster extends Avatar {
 	private String name;
 	private int level;
 	private double damage;

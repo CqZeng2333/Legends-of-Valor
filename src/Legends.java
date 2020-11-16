@@ -38,7 +38,7 @@ public class Legends extends RolePlayingGame {
 					status = 0;
 				}
 				else {
-					heros.add(hf.createBuyableObject(hf.getTypeForHero(str), str));
+					heros.add(hf.createHero(hf.getTypeForHero(str), str));
 					status = 1;
 				}
 			} while (status == 0);
@@ -142,7 +142,7 @@ public class Legends extends RolePlayingGame {
 	}
 
 	@Override
-	public int fight(CommonTile tile) {
+	public int fight(Plain tile) {
 		Scanner sc = new Scanner(System.in);
 		String str;
 		int num;
@@ -151,7 +151,7 @@ public class Legends extends RolePlayingGame {
 		final String ANSI_BLUE = "\033[0;34m";
 		final String ANSI_RED = "\033[0;31m";
 		
-		Fight fight = new Fight(this.getHeros(), ((CommonTile)tile).getMonsters());
+		Fight fight = new Fight(this.getHeros(), ((Plain)tile).getMonsters());
 		while (fight.whoWin() == 0) {
 			int[] hmpair = fight.selectFightPair();
 			Hero hero = this.getHeros().get(hmpair[0]);
@@ -488,11 +488,11 @@ public class Legends extends RolePlayingGame {
 			Tile heroOn = this.getWorld().getAGrid(this.getWorld().getRowOfHero(), this.getWorld().getColOfHero());
 			String type = heroOn.getType();
 			if (type.equals("common_tile")) {
-				if (((CommonTile)heroOn).hasMonster()) { // encounter monster
+				if (((Plain)heroOn).hasMonster()) { // encounter monster
 					System.out.println("You encounter a fight!");
-					int result = this.fight((CommonTile)heroOn);
+					int result = this.fight((Plain)heroOn);
 					if (result == 1) { // win
-						this.settle(true, 100 * ((CommonTile)heroOn).getMonsters().get(0).getLevel(), 2);
+						this.settle(true, 100 * ((Plain)heroOn).getMonsters().get(0).getLevel(), 2);
 					}
 					else { // lose
 						this.settle(false, 0, 0);
