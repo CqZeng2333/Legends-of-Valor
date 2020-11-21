@@ -37,16 +37,23 @@ public class LegdensOfValor extends RolePlayingGame {
 		return 0;
 	}
 
+	// input col and row
+	// output a list of hero if there is any, null otherwise 
+	
+	public List<Hero> detectHeros(int col, int row, LegendBoard board) {
+		return detectStatus.detectHeros(col, row, board);
+	}
 	
 	// input col and row
 	// output a list of monster if there is any, null otherwise 
+	
 	public List<Monster> detectMonsters(int col, int row, LegendBoard board) {
 		return detectStatus.detectMonsters(col, row, board);
 	}
 
 	// return true if it is movable, else false
-	public boolean detectMovable(char direction, LegendBoard board) {
-		return detectStatus.detectMovable(direction, board);
+	public boolean detectMovable(int heroCol, int heroRow, char direction, LegendBoard board) {
+		return detectStatus.detectMovable(heroRow, heroCol, direction, board);
 	}
 	
 	// return true if it is teleportable else false
@@ -54,6 +61,7 @@ public class LegdensOfValor extends RolePlayingGame {
 		return detectStatus.detectTeleportable(heroCol, heroRow, col, row, board);
 	}
 	
+	// return true if it is buyable else false
 	public boolean detectBuyable(int col, int row, LegendBoard board) {
 		return detectStatus.detectBuyable(col, row, board);
 	}
