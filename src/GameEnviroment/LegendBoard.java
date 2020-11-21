@@ -74,6 +74,10 @@ public class LegendBoard extends Board {
 	}
 	
 	public void initializeHeroNMonster(List<Hero> hero) {
+		//initialize position lists
+		this.posOfHero = new ArrayList<>();
+		this.posOfHero = new ArrayList<>();
+		
 		//initialize heros
 		this.heros = new ArrayList<>();
 		Random rd = new Random();
