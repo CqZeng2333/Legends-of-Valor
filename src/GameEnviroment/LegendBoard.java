@@ -266,4 +266,10 @@ public class LegendBoard extends Board {
 	public Hero getHero(int heroIndex) {
 		return heros.get(heroIndex);
 	}
+	public Monster getMonster(int monsterIndex) {
+		return monsters.get(monsterIndex);
+	}
+	public List<int[]> getPosOfMonsters(){
+		return this.posOfMonster;
+	}
 }

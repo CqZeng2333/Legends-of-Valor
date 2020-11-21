@@ -7,16 +7,25 @@ import Avatars.Monster;
 import Map.Tile;
 
 public class detectStatus {
-
+	// input col and row
+	// output a list of monsters or heroes if there is any, null otherwise 
 	public static List<Hero> detectHeros(int col, int row, LegendBoard board) {
 		
 		return null;
 	}
 	
-	// input col and row
-	// output a list of monster if there is any, null otherwise 
-	
 	public static List<Monster> detectMonsters(int col, int row, LegendBoard board) {
+		for(int i = row - 1; i <= row + 1; i++) {
+			if(i < 0 || i >= board.getRow()) {
+				continue;
+			}
+			for(int j = col - 1; j <= col + 1; j++) {
+				if(j < 0 || j >= board.getCol()) {
+					continue;
+				}
+				
+			}
+		}
 		return null;
 	}
 	
@@ -61,23 +70,59 @@ public class detectStatus {
 		}
 
 		Tile tile = board.getAGrid(targetRow, targetCol);
-		// if accessible
+		// get container status
 		int h = tile.getContainer(0);
 		int m = tile.getContainer(1);
-		if(h == -2 || m == -2) {
-			return -2;
-		}else if(h == -1 && m == -1) {
+		
+		//empty for both
+		if(h == -1 && m == -1) {
 			return 2;
-		}else if(h == -1 && m == -2) {
+		//empty for hero
+		}else if(h == -1) {
 			return 1;
-		}else if(h == -2 && m == -1) {
+		//empty for monster
+		}else if(m == -1) {
 			return -1;
+		//inaccessible or not empty
 		}else {
 			return -2;
 		}
 	}
 
-	public static boolean detectTeleportable(int heroCol, int heroRow, int col, int row, LegendBoard board) {
+	public static boolean detectTeleportable(int heroIndex,int heroCol, int heroRow, int col, int row, LegendBoard board) {
+		// not allow to teleport forward
+		if(heroRow > row) {
+			return false;
+		}
+		// inaccessible tile
+		Tile tile = board.getAGrid(row, col);
+		if(!tile.isAccessible()) {
+			return false;
+		}
+		// if not empty
+		if(tile.getContainer(0) != -1) {
+			return false;
+		}
+		// not allow teleport to the hero's home lane
+		if(heroIndex == 0 && (col == 0 || col == 1)) {
+			return false;
+		}
+		if(heroIndex == 1 && (col == 3 || col == 4)) {
+			return false;
+		}
+		if(heroIndex == 2 && (col == 6 || col == 7)) {
+			return false;
+		}
+		// not allow to teleport behind monsters
+		for(int[] pos : board.getPosOfMonsters()) {
+			// if same lane
+			if(pos[1] - col < 2 || col - pos[1] < 2) {
+				// the position is behind a monster
+				if(pos[0] > row) {
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 	
