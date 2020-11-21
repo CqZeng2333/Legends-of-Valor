@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import Equipments.*;
+import GameEnviroment.LegendBoard;
 
 
 public class Hero extends Avatar implements HeroSkillsInterface {
@@ -259,9 +260,12 @@ public class Hero extends Avatar implements HeroSkillsInterface {
 		else return -2;
 	}
 	
-	public int[] teleport(int col, int row) {
-		int[] temp = {col,row};
-		return temp;
+	public void teleport(int col, int row, LegendBoard lb, int index) {
+		return;
+	}
+	
+	public void back(int col, int row, LegendBoard lb, int index) {
+		return;
 	}
 	
 	@Override

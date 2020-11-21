@@ -1,11 +1,14 @@
 package Avatars;
 
 import Equipments.BuyableObject;
+import GameEnviroment.LegendBoard;
 
 public interface HeroSkillsInterface {
 	public double castSpell(String spellName);
 	
-	public int[] teleport(int col, int row);
+	public void teleport(int col, int row, LegendBoard lb, int index);
+	
+	public void back(int col, int row, LegendBoard lb, int index);
 
 	public int drinkPotion(String potionName);
 

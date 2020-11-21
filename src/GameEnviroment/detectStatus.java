@@ -135,4 +135,8 @@ public class detectStatus {
 			return false;
 		}
 	}
+	
+	public static boolean detectWinLose(LegendBoard lb) {
+		return false;
+	}
 }

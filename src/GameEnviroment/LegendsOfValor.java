@@ -437,6 +437,10 @@ public class LegendsOfValor extends RolePlayingGame {
 	public boolean detectBuyable(int col, int row, LegendBoard board) {
 		return detectStatus.detectBuyable(col, row, board);
 	}
+	
+	public boolean detectWinLose(LegendBoard lb) {
+		return detectStatus.detectWinLose(lb);
+	}
 
 	private List<Hero> selectHero() {
 		Scanner sc = new Scanner(System.in);
