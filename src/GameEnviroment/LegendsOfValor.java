@@ -18,7 +18,6 @@ import Map.Tile;
 
 public class LegendsOfValor extends RolePlayingGame {
 
-	public LegendBoard board;
 	public HeroMonsterFight fight;
 	private HeroFactory hf = new HeroFactory();
 
@@ -29,23 +28,37 @@ public class LegendsOfValor extends RolePlayingGame {
 		List<Hero> heros = this.selectHero();
 		// initialize the game
 		this.initialize(heros, 8);
-		System.out.println(this.getWorld());
+		List<Monster> monsters = this.getBoard().getMonsters();
+		System.out.println(this.getBoard());
 
 		do {
+			// iterate through all heros
 			for (int i = 0; i < heros.size(); i++) {
-				Tile heroOn = this.getWorld().getAGrid(this.getWorld().getRowOfHero(i),
-						this.getWorld().getColOfHero(i));
+				// check win/lose status after every move of a hero/monster
+				int winStatus = this.detectWinLose(this.getBoard());
+				if (winStatus == 1) {
+					System.out.println("Heros win! Monsters lose!");
+				} else if (winStatus == -1) {
+					System.out.println("Heros lose! Monsters win!");
+				}
+
+				// if still on fight, then move on
+				Tile heroOn = this.getBoard().getAGrid(this.getBoard().getRowOfHero(i),
+						this.getBoard().getColOfHero(i));
 				String type = heroOn.getType();
 
 				if (!type.equals("market") && !type.equals("inaccessible_tile")) {
 					// hero in tile where a fight can happen
-					if (this.detectMonsters(board.getColOfHero(i), board.getRowOfHero(i), board) != null) {
+					if (this.detectMonsters(this.getBoard().getColOfHero(i), this.getBoard().getRowOfHero(i),
+							this.getBoard()) != null) {
 						// the list of monsters is not empty
 						System.out.println("You encounter a fight!");
-						fight = new HeroMonsterFight(heros.get(i),
-								this.detectMonsters(board.getColOfHero(i), board.getRowOfHero(i), board).get(0));
+						// start fight between the hero and the 1st monster in list
+						fight = new HeroMonsterFight(heros.get(i), this.detectMonsters(this.getBoard().getColOfHero(i),
+								this.getBoard().getRowOfHero(i), this.getBoard()).get(0));
+						fight.runFight();
 					} else {
-						// no monsters nearby
+						// no monster nearby
 						System.out.println("This is a safe place!");
 					}
 				} else if (type.equals("market")) {
@@ -54,17 +67,38 @@ public class LegendsOfValor extends RolePlayingGame {
 				// move on
 
 				System.out.println("======================================================");
-				System.out.println(this.getWorld());
-				int status = this.move();
+				System.out.println(this.getBoard());
+				int status = this.move(i);
 				if (status == 1) {
 					System.out.println("You quit the game!");
 					System.exit(0); // quit
 				}
 			}
+			// iterate through all monster
+			for (int i = 0; i < monsters.size(); i++) {
+				Tile monsterOn = this.getBoard().getAGrid(this.getBoard().getRowOfMonster(i),
+						this.getBoard().getColOfMonster(i));
+				String type = monsterOn.getType();
+
+				// check if there are heros nearby
+				if (this.detectHeros(this.getBoard().getColOfMonster(i), this.getBoard().getRowOfMonster(i),
+						this.getBoard()) != null) {
+					// the list of heros is not empty
+					System.out.println("Monster encounter a fight!");
+					// start fight between the monster and the 1st hero in list
+					fight = new HeroMonsterFight(this.detectHeros(this.getBoard().getColOfMonster(i),
+							this.getBoard().getRowOfMonster(i), this.getBoard()).get(0), monsters.get(i));
+					fight.runFight();
+				}
+				else {
+					this.getBoard().moveOfMonster(i); //monster move forward
+				}
+			}
 		} while (true);
 	}
 
-	private String[] inputActionData(Hero hero, int actionNum) {
+	// operate actions by the input number
+	public static String[] inputActionData(Hero hero, int actionNum) {
 		Scanner sc = new Scanner(System.in);
 		String str;
 		int status;
@@ -151,14 +185,20 @@ public class LegendsOfValor extends RolePlayingGame {
 					return new String[] { "change_armor", str };
 				}
 			} while (status == 0);
+		} else if (actionNum == 6) {// teleport
+			// hero.teleport(col, row, index); //TODO:fix teleport
+			return null;
+		} else if (actionNum == 7) {// back to nexus
+			// hero.back(col, row, lb, index); //TODO:fix back
+			return null;
 		}
 		return null;
 	}
 
-	private int move() {
+	private int move(int heroIndex) {
 		Scanner sc = new Scanner(System.in);
 		String str;
-		int num, num2;
+		int actionIndex; // index of action
 		int status, status2;
 		System.out.println("======================================================");
 		System.out.println("W/w: move up");
@@ -170,52 +210,38 @@ public class LegendsOfValor extends RolePlayingGame {
 		System.out.println("3. Use a potion");
 		System.out.println("4. Change weapon");
 		System.out.println("5. Change armor");
+		System.out.println("6. Teleport");
+		System.out.println("7. Back to Nexus");
 		status = 0;
 		do {
 			System.out.print("Please input the above letter to move: ");
 			str = sc.nextLine();
 
-			// 3||4||5
-			if ((num = this.isDigit(str)) > 0 && num >= 3 && num <= 5) {
-				// select hero
-				System.out.println("======================================================");
-				for (int i = 0; i < this.getHeros().size(); i++) {
-					System.out.println((i + 1) + ". " + this.getHeros().get(i).getName());
-				}
-				System.out.println("======================================================");
-				status2 = 0;
-				do {
-					System.out.print("Please select from the above hero(s): ");
-					str = sc.nextLine();
-					if ((num2 = this.isDigit(str)) > 0 && num2 >= 1 && num2 <= this.getHeros().size()) {
-						num2 -= 1; // index of hero
-						status2 = 1;
-					}
-				} while (status2 == 0);
-
-				String[] action = this.inputActionData(this.getHeros().get(num2), num);
+			// input action is 3||4||5||6||7
+			if ((actionIndex = this.isDigit(str)) > 0 && actionIndex >= 3 && actionIndex <= 7) {
+				String[] action = LegendsOfValor.inputActionData(this.getHeros().get(heroIndex), actionIndex);
 				if (action != null) {
-					this.heroActionInPeace(num2, action);
+					this.heroActionInPeace(heroIndex, action);
 				} else {
 					System.out.println("You cannot do this!");
 				}
 			}
 
-			// w||a||s||d||q||i
+			// input action is w||a||s||d||q||i
 			char c = this.isDirection(str);
 			if (c == ' ')
 				;
-			else if (c == 'q')
+			else if (c == 'q') {
 				return 1;
-			else if (c == 'i') {
+			} else if (c == 'i') {
 				this.displayHeros();
 			} else {
-				// if (super.move(c) < 0) System.out.println("Cannot access this place!");
-				if (false)
-					System.out.println("Cannot access this place!");
-				else {
-					System.out.println(this.getWorld());
+				int movableHero = this.getBoard().moveOfHero(heroIndex, c);
+				if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
+					System.out.println(this.getBoard());
 					status = 1;
+				} else {
+					System.out.println("Cannot access this place!");
 				}
 			}
 		} while (status == 0);
@@ -423,10 +449,11 @@ public class LegendsOfValor extends RolePlayingGame {
 		return detectStatus.detectMonsters(col, row, board);
 	}
 
-	// return true if it is movable, else false
-	public int detectMovable(int heroCol, int heroRow, char direction, LegendBoard board) {
-		return detectStatus.detectMovable(heroRow, heroCol, direction, board);
-	}
+	// return 1 only movable for heroes, 2 movable both, -1 only movable for
+	// monsters, -2 not movable for both
+//	public int detectMovable(int heroCol, int heroRow, char direction, LegendBoard board) {
+//		return detectStatus.detectMovable(heroRow, heroCol, direction, board);
+//	}
 
 	// return true if it is teleportable else false
 	public boolean detectTeleportable(int heroIndex, int heroCol, int heroRow, int col, int row, LegendBoard board) {
@@ -437,8 +464,9 @@ public class LegendsOfValor extends RolePlayingGame {
 	public boolean detectBuyable(int col, int row, LegendBoard board) {
 		return detectStatus.detectBuyable(col, row, board);
 	}
-	
-	public boolean detectWinLose(LegendBoard lb) {
+
+	// return 1: heroes win, -1: heroes lose, 0: still fight
+	public int detectWinLose(LegendBoard lb) {
 		return detectStatus.detectWinLose(lb);
 	}
 
@@ -446,24 +474,15 @@ public class LegendsOfValor extends RolePlayingGame {
 		Scanner sc = new Scanner(System.in);
 		String str;
 		int status;
-		System.out.print("First please select your hero(s). \n");
-		System.out.print("Please input how many heros you want(1~3): ");
-		int numOfHero = 0;
-		do {
-			str = sc.nextLine();
-			status = str.equals("1") ? 1 : (str.equals("2") ? 1 : (str.equals("3") ? 1 : 0));
-			if (status == 0)
-				System.out.print("Please input correct number: ");
-			else
-				numOfHero = Integer.parseInt(str);
-		} while (status == 0);
+		System.out.print("First please select your 3 heros. \n");
 
 		System.out.print(hf.display());
 		System.out.print("Please input hero name: \n");
 		List<Hero> heros = new ArrayList<>();
-		for (int i = 0; i < numOfHero; i++) {
+		for (int i = 0; i < 1; i++) { // todo: change to 3
 			do {
-				str = sc.nextLine();
+				// str = sc.nextLine();
+				str = "Caliber_Heist"; // todo: test only, change back
 				if (hf.getTypeForHero(str) == null) {
 					System.out.print("Please input correct name: \n");
 					status = 0;

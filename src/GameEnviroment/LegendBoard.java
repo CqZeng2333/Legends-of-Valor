@@ -202,9 +202,9 @@ public class LegendBoard extends Board {
 	 */
 	@Override
 	public String toString() {
-		final String ANSI_RESET = "\033[0m";
-		final String ANSI_BLUE = "\033[0;34m";
-		final String ANSI_RED = "\033[0;31m";
+		final String ANSI_RESET = "";//"\033[0m";
+		final String ANSI_BLUE = "";// "\033[0;34m";
+		final String ANSI_RED = "";// "\033[0;31m";
 		char mk;
 		String board = "";
 		for (int i = 0; i < this.getRow(); i++) {
@@ -270,8 +270,17 @@ public class LegendBoard extends Board {
 	public Hero getHero(int heroIndex) {
 		return heros.get(heroIndex);
 	}
+	public int getRowOfMonster(int i) {
+		return posOfMonster.get(i)[0];
+	}
+	public int getColOfMonster(int i) {
+		return posOfMonster.get(i)[1];
+	}
 	public Monster getMonster(int monsterIndex) {
 		return monsters.get(monsterIndex);
+	}
+	public List<Monster> getMonsters() {
+		return monsters;
 	}
 	public List<int[]> getPosOfMonsters(){
 		return this.posOfMonster;

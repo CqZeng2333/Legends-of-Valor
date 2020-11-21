@@ -9,12 +9,12 @@ import Map.Plain;
 
 public abstract class RolePlayingGame {
 	private List<Hero> heros;
-	private LegendBoard world;
+	private LegendBoard board;
 	
 	public void initialize(List<Hero> heros, int boardSize) {
 		this.heros = heros;
-		world = new LegendBoard(boardSize);
-		world.initializeHeroNMonster(this.heros);
+		board = new LegendBoard(boardSize);
+		board.initializeHeroNMonster(this.heros);
 	}
 	
 //	public abstract void run();
@@ -30,13 +30,13 @@ public abstract class RolePlayingGame {
 		return str;
 	}
 	public String displayWorld() {
-		return world.toString();
+		return board.toString();
 	}
 
 	public List<Hero> getHeros() {
 		return heros;
 	}
-	public LegendBoard getWorld() {
-		return world;
+	public LegendBoard getBoard() {
+		return board;
 	}
 }
