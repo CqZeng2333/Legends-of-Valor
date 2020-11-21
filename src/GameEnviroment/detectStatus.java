@@ -136,7 +136,24 @@ public class detectStatus {
 		}
 	}
 	
-	public static boolean detectWinLose(LegendBoard lb) {
-		return false;
+	//1: heroes win
+	//-1: heroes lose
+	//0: still fight
+	public static int detectWinLose(LegendBoard lb) {
+		int col = lb.getCol();
+		int row = lb.getRow();
+		for(int i = 0 ; i < col; i++) {
+			Tile tile = lb.getAGrid(0, i);
+			if(tile.getContainer(0)>=0) {
+				return 1;
+			}
+		}
+		for(int i = 0 ; i < col; i++) {
+			Tile tile = lb.getAGrid(row - 1, i);
+			if(tile.getContainer(1)>=0) {
+				return -1;
+			}
+		}
+		return 0;
 	}
 }
