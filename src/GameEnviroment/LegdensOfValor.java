@@ -39,12 +39,12 @@ public class LegdensOfValor extends RolePlayingGame {
 	
 	// input col and row
 	// output a list of monster if there is any, null otherwise 
-	public List<Monster> detectMonsters(int col, int row) {
-		return detectStatus.detectMonsters(col, row);
+	public List<Monster> detectMonsters(int col, int row, LegendBoard board) {
+		return detectStatus.detectMonsters(col, row, board);
 	}
 
 	// return true if it is movable, else false
-	public boolean detectMovable(char direction) {
-		return detectStatus.detectMovable(direction);
+	public boolean detectMovable(char direction, LegendBoard board) {
+		return detectStatus.detectMovable(direction, board);
 	}
 }
