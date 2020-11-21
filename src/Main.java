@@ -1,8 +1,8 @@
-import GameEnviroment.Legends;
+import GameEnviroment.LegendsOfValor;;
 
 public class Main {
 	public static void main(String[] args) {
-		Legends lg = new Legends();
+		LegendsOfValor lg = new LegendsOfValor();
 		lg.run();
 	}
 }

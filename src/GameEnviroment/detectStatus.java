@@ -1,6 +1,5 @@
 package GameEnviroment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Avatars.Hero;
@@ -11,55 +10,23 @@ public class detectStatus {
 	// input col and row
 	// output a list of monsters or heroes if there is any, null otherwise 
 	public static List<Hero> detectHeros(int col, int row, LegendBoard board) {
-		List<Hero> list = new ArrayList<>();
-		// eight cell around it
-		for(int i = row - 1; i <= row + 1; i++) {
-			// out of board
-			if(i < 0 || i >= board.getRow()) {
-				continue;
-			}
-			for(int j = col - 1; j <= col + 1; j++) {
-				//out of board
-				if(j < 0 || j >= board.getCol()) {
-					continue;
-				}
-				Tile tile = board.getAGrid(i, j);
-				if(tile.isAccessible()) {
-					int index = tile.getContainer(0);
-					// the container of hero is not empty
-					if(tile.getContainer(1) >= 0) {
-						list.add(board.getHero(index));
-					}
-				}
-			}
-		}
-		return list;
+		
+		return null;
 	}
 	
 	public static List<Monster> detectMonsters(int col, int row, LegendBoard board) {
-		List<Monster> list = new ArrayList<>();
-		// eight cell around it
 		for(int i = row - 1; i <= row + 1; i++) {
-			// out of board
 			if(i < 0 || i >= board.getRow()) {
 				continue;
 			}
 			for(int j = col - 1; j <= col + 1; j++) {
-				//out of board
 				if(j < 0 || j >= board.getCol()) {
 					continue;
 				}
-				Tile tile = board.getAGrid(i, j);
-				if(tile.isAccessible()) {
-					int index = tile.getContainer(1);
-					// the container of monster is not empty
-					if(tile.getContainer(1) >= 0) {
-						list.add(board.getMonster(index));
-					}
-				}
+				
 			}
 		}
-		return list;
+		return null;
 	}
 	
 	// return:

@@ -76,7 +76,7 @@ public class LegendBoard extends Board {
 	public void initializeHeroNMonster(List<Hero> hero) {
 		//initialize position lists
 		this.posOfHero = new ArrayList<>();
-		this.posOfHero = new ArrayList<>();
+		this.posOfMonster = new ArrayList<>();
 		
 		//initialize heros
 		this.heros = new ArrayList<>();

@@ -429,8 +429,8 @@ public class LegendsOfValor extends RolePlayingGame {
 	}
 
 	// return true if it is teleportable else false
-	public boolean detectTeleportable(int heroCol, int heroRow, int col, int row, LegendBoard board) {
-		return detectStatus.detectTeleportable(heroCol, heroRow, col, row, board);
+	public boolean detectTeleportable(int heroIndex, int heroCol, int heroRow, int col, int row, LegendBoard board) {
+		return detectStatus.detectTeleportable(heroIndex, heroCol, heroRow, col, row, board);
 	}
 
 	// return true if it is buyable else false
