@@ -29,9 +29,10 @@ public class LegdensOfValor extends RolePlayingGame {
 		 * 2. buy
 		 * 3. sell
 		 * 4. teleport
-		 * 5. attack
-		 * 6. potion
-		 * 7. weapon	
+		 * 5. back
+		 * 6. attack
+		 * 7. potion
+		 * 8. weapon	
 		*/
 		return 0;
 	}
@@ -46,5 +47,14 @@ public class LegdensOfValor extends RolePlayingGame {
 	// return true if it is movable, else false
 	public boolean detectMovable(char direction, LegendBoard board) {
 		return detectStatus.detectMovable(direction, board);
+	}
+	
+	// return true if it is teleportable else false
+	public boolean detectTeleportable(int heroCol, int heroRow, int col, int row, LegendBoard board) {
+		return detectStatus.detectTeleportable(heroCol, heroRow, col, row, board);
+	}
+	
+	public boolean detectBuyable(int col, int row, LegendBoard board) {
+		return detectStatus.detectBuyable(col, row, board);
 	}
 }

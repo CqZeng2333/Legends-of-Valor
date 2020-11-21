@@ -14,4 +14,12 @@ public class detectStatus {
 	public static boolean detectMovable(char direction, LegendBoard board) {
 		return true;
 	}
+
+	public static boolean detectTeleportable(int heroCol, int heroRow, int col, int row, LegendBoard board) {
+		return true;
+	}
+	
+	public static boolean detectBuyable(int col, int row, LegendBoard board) {
+		return true;
+	}
 }
