@@ -17,10 +17,10 @@ public abstract class RolePlayingGame {
 		world.initializeHeroNMonster(this.heros);
 	}
 	
-	public abstract void run();
-	public abstract int fight(Plain tile);
-	
-	public abstract int action(String input);
+//	public abstract void run();
+//	public abstract int fight();
+//	
+//	public abstract int action();
 	
 	public String displayHero() {
 		String str = "";

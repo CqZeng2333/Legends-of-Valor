@@ -263,5 +263,7 @@ public class LegendBoard extends Board {
 	public void setColOfHero(int i, int colOfHero) {
 		this.posOfHero.get(i)[1] = colOfHero;
 	}
-	
+	public Hero getHero(int heroIndex) {
+		return heros.get(heroIndex);
+	}
 }
