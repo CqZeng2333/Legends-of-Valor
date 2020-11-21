@@ -2,14 +2,233 @@ package GameEnviroment;
 
 import Avatars.Hero;
 import Avatars.Monster;
+import Equipments.Armor;
+import Equipments.BuyableObject;
+import Equipments.Potion;
+import Equipments.Spell;
+import Equipments.Weapon;
+
+import java.util.List;
+import java.util.Scanner;
 
 public class HeroMonsterFight {
 
+	final String ANSI_RESET = "\033[0m";
+	final String ANSI_BLUE = "\033[0;34m";
+	final String ANSI_RED = "\033[0;31m";
+	
 	private Hero hero;
 	private Monster monster;
+	private Scanner sc;
+	public String str;
+	public int num;
 	
 	public HeroMonsterFight(Hero hero, Monster monster) {
 		this.hero = hero;
 		this.monster = monster;
+		this.sc = new Scanner(System.in); 
+	}
+
+	
+	public void runFight() {
+		while (hero.isAlive() && monster.isAlive()) {
+			System.out.println("======================================================");
+			System.out.println("Hero "+ANSI_BLUE+hero.getName()+ANSI_RESET+" VS Monster "+ANSI_RED+monster.getName()+ANSI_RESET);
+			
+			// Hero turn
+			System.out.println("1. Regular Attack");
+			System.out.println("2. Cast a spell");
+			System.out.println("3. Use a potion");
+			System.out.println("4. Change weapon");
+			System.out.println("5. Change armor");
+			System.out.println("6. Display information");
+			
+			System.out.print("Please select from the above function: ");
+			str = sc.nextLine();
+			
+			if ((num = this.isDigit(str)) > 0 && num >= 1 && num <= 6) {
+				if (num == 6) {
+					System.out.println("======================================================");
+					System.out.println(ANSI_BLUE+"Hero"+ANSI_RESET+": ");
+					System.out.println(hero.toStringInFight());
+					System.out.println(ANSI_RED+"Monster"+ANSI_RESET+": ");
+					System.out.println(monster.toString());
+					System.out.println("======================================================");
+				}
+				else {
+					String[] action = this.inputActionData(hero, num);
+					if (action != null) {
+						heroTurn(action);
+					}
+					else {
+						System.out.println("You cannot do this!");
+					}
+				}
+			}
+			
+		}
+	}
+	
+	public int heroTurn(String[] action) {
+		if (hero == null || monster == null) return 0;
+		
+		int status = 0;
+		if (action[0].equals("attack")) {
+			double attackValue = hero.attack();
+			if (!monster.canDodge()) {
+				status = monster.beAttacked(attackValue);
+				System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" loses "+ANSI_RED+monster.loseHowMuchHP(attackValue)+ANSI_RESET+" HP!");
+			}
+			else {
+				System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" dodges!");
+			}
+			System.out.println(monster);
+		}
+		else if (action[0].equals("spell")) {
+			double spellValue = hero.castSpell(action[1]);
+			String spellType = hero.castSpellSideEffect(action[1]);
+			if (!monster.canDodge()) {
+				monster.beWeaken(spellType);
+				System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" is weaken by "+spellType+"!");
+				status = monster.beAttacked(spellValue);
+				System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" loses "+ANSI_RED+monster.loseHowMuchHP(spellValue)+ANSI_RESET+" HP!");
+			}
+			else {
+				System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" dodges!");
+			}
+			System.out.println(monster);
+		}
+		else if (action[0].equals("potion")) {
+			hero.drinkPotion(action[1]);
+			System.out.println(ANSI_BLUE+"Hero"+ANSI_RESET+" drinks potion!");
+			System.out.println(hero.toStringInFight());
+		}
+		else if (action[0].equals("change_weapon")) {
+			hero.changeEquipment("weapon", action[1]);
+			System.out.println(hero.toStringInFight());
+		}
+		else if (action[0].equals("change_armor")) {
+			hero.changeEquipment("armor", action[1]);
+			System.out.println(hero.toStringInFight());
+		}
+		
+		if (status == -1) {
+			System.out.println(ANSI_RED+"Monster"+ANSI_RESET+" dies!");
+		}
+		return status;
+	}
+
+	/*
+	 * Implement a round of monster j to hero i
+	 * Return 0 if hero alive
+	 * return -1 if hero dies
+	 */
+	public int monsterTurn() {
+		int status = 0;
+		double attackValue = monster.attack();
+		if (!hero.canDodge()) {
+			status = hero.beAttacked(attackValue);
+			System.out.println(ANSI_BLUE+"Hero"+ANSI_RESET+" loses "+ANSI_RED+hero.loseHowMuchHP(attackValue)+ANSI_RESET+" HP!");
+		}
+		else {
+			System.out.println(ANSI_BLUE+"Hero"+ANSI_RESET+" dodges!");
+		}
+		System.out.println(hero.toStringInFight());
+		if (status == -1) {
+			System.out.println(ANSI_BLUE+"Hero"+ANSI_RESET+" dies!");
+		}
+		return status;
+	}
+
+	private String[] inputActionData (Hero hero, int actionNum) {
+		Scanner sc = new Scanner(System.in);
+		String str;
+		int status;
+		
+		if (actionNum == 1) { // attack
+			return new String[] {"attack"};
+		}
+		else if (actionNum == 2) {// cast a spell, maybe no spell
+			List<BuyableObject> spells = hero.getOutfit().getSpellCarrying();
+			if (spells.size() == 0) return null;
+			
+			System.out.print("Your spells: ");
+			for (BuyableObject s : spells) System.out.print(s.getName() + " ");
+			System.out.print("\n");
+			do {
+				System.out.print("Please select from the above spell(s): ");
+				str = sc.nextLine();
+				Spell s = hero.getOutfit().getSpellWithName(str);
+				if (s == null) status = 0;
+				else {
+					status = 1;
+					return new String[] {"spell", str};
+				}
+			} while (status == 0);
+		}
+		else if (actionNum == 3) { // use a potion
+			List<BuyableObject> potions = hero.getOutfit().getPotionCarrying();
+			if (potions.size() == 0) return null;
+			
+			System.out.print("Your potions: ");
+			for (BuyableObject p : potions) System.out.print(p.getName() + " ");
+			System.out.print("\n");
+			do {
+				System.out.print("Please select from the above potion(s): ");
+				str = sc.nextLine();
+				Potion p = hero.getOutfit().getPotionWithName(str);
+				if (p == null) status = 0;
+				else {
+					status = 1;
+					return new String[] {"potion", str};
+				}
+			} while (status == 0);
+		}
+		else if (actionNum == 4) { // change weapon
+			List<BuyableObject> weapons = hero.getOutfit().getWeaponCarrying();
+			if (weapons.size() == 0) return null;
+			
+			System.out.print("Your weapons: ");
+			for (BuyableObject w : weapons) System.out.print(w.getName() + " ");
+			System.out.print("\n");
+			do {
+				System.out.print("Please select from the above weapon(s): ");
+				str = sc.nextLine();
+				Weapon w = hero.getOutfit().getWeaponWithName(str);
+				if (w == null) status = 0;
+				else {
+					status = 1;
+					return new String[] {"change_weapon", str};
+				}
+			} while (status == 0);
+		}
+		else if (actionNum == 5) { // change armor
+			List<BuyableObject> armors = hero.getOutfit().getArmorCarrying();
+			if (armors.size() == 0) return null;
+			
+			System.out.print("Your armors: ");
+			for (BuyableObject a : armors) System.out.print(a.getName() + " ");
+			System.out.print("\n");
+			do {
+				System.out.print("Please select from the above armor(s): ");
+				str = sc.nextLine();
+				Armor a = hero.getOutfit().getArmorWithName(str);
+				if (a == null) status = 0;
+				else {
+					status = 1;
+					return new String[] {"change_armor", str};
+				}
+			} while (status == 0);
+		}
+		return null;
+	}
+	
+	
+	private int isDigit(String string) {
+		if (string.matches("\\d+")) {
+			int digits = Integer.parseInt(string);
+			return digits;
+		}
+		return -1;
 	}
 }
