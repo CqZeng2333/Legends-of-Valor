@@ -16,9 +16,7 @@ public abstract class RolePlayingGame {
 	public abstract void run();
 	public abstract int fight(Plain tile);
 	
-	public int move(char direction) {
-		return this.world.move(direction);
-	}
+	public abstract int action(String input);
 	
 	public String displayHero() {
 		String str = "";
