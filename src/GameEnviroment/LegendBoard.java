@@ -211,6 +211,23 @@ public class LegendBoard extends Board {
 	}
 	
 	/*
+	 * Move out monster i from game after monster die
+	 * Return 0 if successfully remove
+	 * return -1 if input error monster index
+	 * return -2 if monster i not die
+	 */
+	public int monsterDie(int i) {
+		if (this.monsters.size() <= i) return -1; // error monster index
+		if (this.monsters.get(i).isAlive()) return -2; // monster not die
+		
+		int rowOfMonster = this.posOfMonster.get(i)[0];
+		int colOfMonster = this.posOfMonster.get(i)[1];
+		((AccessibleTile)this.board[rowOfMonster][colOfMonster]).moveOut(1);
+		this.monsters.remove(i);
+		return 0;
+	}
+	
+	/*
 	 * Return a string of the board
 	 */
 	@Override
