@@ -19,6 +19,7 @@ import Map.Tile;
 public class LegendsOfValor extends RolePlayingGame {
 
 	private HeroFactory hf = new HeroFactory();
+	private int roundGenerateMonster = 8; // the number of rounds to generate new monsters
 
 	public void run() {
 		// print welcome message
@@ -30,7 +31,15 @@ public class LegendsOfValor extends RolePlayingGame {
 		List<Monster> monsters = this.getBoard().getMonsters();
 		System.out.println(this.getBoard());
 
+		int round = 0;
 		game: while (true) {
+			System.out.println("Round number " + round);
+			// generate new monsters every 8 rounds
+			if (round > 0 && round % roundGenerateMonster == 0) {
+				System.out.print("New monsters are coming!");
+				this.getBoard().createNewMonsters();
+			}
+
 			// iterate through all heros
 			for (int i = 0; i < heros.size(); i++) {
 				// check win/lose status after every move of a hero/monster
@@ -96,25 +105,30 @@ public class LegendsOfValor extends RolePlayingGame {
 			}
 			// iterate through all monster
 			for (int i = 0; i < monsters.size(); i++) {
-				Tile monsterOn = this.getBoard().getAGrid(this.getBoard().getRowOfMonster(i),
-						this.getBoard().getColOfMonster(i));
-				String type = monsterOn.getType();
+				// monster item can be null because once monster is killed it is removed from
+				// list
+				if (monsters.get(i) != null) {
+					Tile monsterOn = this.getBoard().getAGrid(this.getBoard().getRowOfMonster(i),
+							this.getBoard().getColOfMonster(i));
+					String type = monsterOn.getType();
 
-				// check if there are heros nearby
-				List<Hero> herosList = this.detectHeros(this.getBoard().getColOfMonster(i),
-						this.getBoard().getRowOfMonster(i), this.getBoard());
-				if (herosList.size() > 0) {
-					// the list of heros is not empty
-					System.out.println("Monster starts the fight!");
-					// start fight between the monster and the 1st hero in list
-					this.fight(herosList.get(0), monsters.get(i));
-				} else {
-					this.getBoard().moveOfMonster(i); // monster move forward
+					// check if there are heros nearby
+					List<Hero> herosList = this.detectHeros(this.getBoard().getColOfMonster(i),
+							this.getBoard().getRowOfMonster(i), this.getBoard());
+					if (herosList.size() > 0) {
+						// the list of heros is not empty
+						System.out.println("Monster starts the fight!");
+						// start fight between the monster and the 1st hero in list
+						this.fight(herosList.get(0), monsters.get(i));
+					} else {
+						this.getBoard().moveOfMonster(i); // monster move forward
+					}
+
+					// print board after the monster moves
+					System.out.println(this.getBoard());
 				}
-
-				// print board after the monster moves
-				System.out.println(this.getBoard());
 			}
+			round += 1;
 		}
 	}
 
@@ -328,7 +342,7 @@ public class LegendsOfValor extends RolePlayingGame {
 		int num1 = 0; // buy or sell
 		int num3 = 0; // object type
 
-		System.out.println("You are at the market. ");
+		System.out.println("Welcome, " + this.getHeros().get(heroIndex).getName() + "! You are at the market. ");
 		System.out.println("======================================================");
 		System.out.println(mk.displayObject());
 		System.out.println("======================================================");
@@ -409,7 +423,7 @@ public class LegendsOfValor extends RolePlayingGame {
 					bo = mk.getBF().createBuyableObject(type, str);
 					if (hero.buyObject(bo) >= 0) {
 						System.out.println("Hero " + hero.getName() + " buys " + bo.getName() + ". ");
-						// this.displayHeros();
+						System.out.println(this.getHeros().get(heroIndex).toString());
 					} else {
 						System.out.println("Cannot buy this!");
 					}
@@ -417,7 +431,7 @@ public class LegendsOfValor extends RolePlayingGame {
 				} else { // sell
 					if (hero.sellObject(type, str) == 0) {
 						System.out.println("Hero " + hero.getName() + " sells " + str + ". ");
-						// this.displayHeros();
+						System.out.println(this.getHeros().get(heroIndex).toString());
 					} else {
 						System.out.println("Cannot sell this!");
 					}
@@ -456,9 +470,20 @@ public class LegendsOfValor extends RolePlayingGame {
 	}
 
 	public void fight(Hero hero, Monster monster) {
+		int heroIndex = this.getHeros().indexOf(hero);
+		int monsterIndex = this.getBoard().getMonsters().indexOf(monster);
 		// pass hero and monster
 		HeroMonsterFight fight = new HeroMonsterFight(hero, monster);
-		fight.runFight();
+		int fightStatus = fight.runFight();
+		if (fightStatus == 0) {
+			// hero wins and remove the monster from board
+			this.getBoard().monsterDie(monsterIndex);
+		} else if (fightStatus == 1) {
+			// hero loses and return back to nexus
+			this.getBoard().heroBack(heroIndex);
+			// monster wins and go forward by 1
+			this.getBoard().moveOfMonster(monsterIndex);
+		}
 	}
 
 	// input col and row
@@ -497,10 +522,9 @@ public class LegendsOfValor extends RolePlayingGame {
 		System.out.print(hf.display());
 		System.out.print("Please input hero name: \n");
 		List<Hero> heros = new ArrayList<>();
-		for (int i = 0; i < 1; i++) { // todo: change to 3
+		for (int i = 0; i < 3; i++) {
 			do {
-				// str = sc.nextLine();
-				str = "Caliber_Heist"; // todo: test only, change back
+				str = sc.nextLine();
 				if (hf.getTypeForHero(str) == null) {
 					System.out.print("Please input correct name: \n");
 					status = 0;

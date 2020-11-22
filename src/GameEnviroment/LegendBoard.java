@@ -146,37 +146,37 @@ public class LegendBoard extends Board {
 			((AccessibleTile) this.board[pos[0]][pos[1]]).stepOn(1, this.monsters.size() - 1);
 		}
 	}
-	
+
 	/*
-	 * The tile with specific row and col is stepped on by a hero or a monster with its index
-	 * 0 for hero, and 1 for monster
-	 * Return 0 if they successfully step on
+	 * The tile with specific row and col is stepped on by a hero or a monster with
+	 * its index 0 for hero, and 1 for monster Return 0 if they successfully step on
 	 * return -1 if not success
 	 */
 	public int stepOn(int row, int col, int heroOrMonster, int index) {
-		int status = ((AccessibleTile)(this.board[row][col])).stepOn(heroOrMonster, index);
-		if (status < 0) return status;
-		
+		int status = ((AccessibleTile) (this.board[row][col])).stepOn(heroOrMonster, index);
+		if (status < 0)
+			return status;
+
 		char t = this.board[row][col].getMark();
 		if (t == 'B' || t == 'C' || t == 'K') {
-			((Buff)this.board[row][col]).buffAbility(this.heros.get(index));
+			((Buff) this.board[row][col]).buffAbility(this.heros.get(index));
 		}
 		return 0;
 	}
-	
+
 	/*
-	 * The tile with specific row and col is moved out by a hero or a monster with its index
-	 * 0 for hero, and 1 for monster
-	 * Return 0 if they successfully move out
-	 * return -1 if not success
+	 * The tile with specific row and col is moved out by a hero or a monster with
+	 * its index 0 for hero, and 1 for monster Return 0 if they successfully move
+	 * out return -1 if not success
 	 */
 	public int moveOut(int row, int col, int heroOrMonster, int index) {
-		int status = ((AccessibleTile)(this.board[row][col])).moveOut(heroOrMonster);
-		if (status < 0) return status;
-		
+		int status = ((AccessibleTile) (this.board[row][col])).moveOut(heroOrMonster);
+		if (status < 0)
+			return status;
+
 		char t = this.board[row][col].getMark();
 		if (t == 'B' || t == 'C' || t == 'K') {
-			((Buff)this.board[row][col]).removeBuff(this.heros.get(index));
+			((Buff) this.board[row][col]).removeBuff(this.heros.get(index));
 		}
 		return 0;
 	}
@@ -256,6 +256,15 @@ public class LegendBoard extends Board {
 		int rowOfMonster = this.posOfMonster.get(i)[0];
 		int colOfMonster = this.posOfMonster.get(i)[1];
 
+		// if the next move is the heros' nexus, then move anyway because there will
+		// always be hero(s) in neighboring cells
+		if (this.board[rowOfMonster + 1][colOfMonster].getType().equals("hero_nexus")) {
+			((AccessibleTile) this.board[rowOfMonster][colOfMonster]).moveOut(1);
+			rowOfMonster += 1;
+			this.setRowOfMonster(i, rowOfMonster);
+			status = ((AccessibleTile) this.board[rowOfMonster][colOfMonster]).stepOn(1, i);
+			return status;
+		}
 		// on the edge or cannot access
 		if (rowOfMonster >= this.board.length - 1 || !this.board[rowOfMonster + 1][colOfMonster].isAccessible())
 			return -1;
