@@ -31,15 +31,19 @@ public class LegendsOfValor extends RolePlayingGame {
 		List<Monster> monsters = this.getBoard().getMonsters();
 		System.out.println(this.getBoard());
 
-		do {
+		game: while (true) {
 			// iterate through all heros
 			for (int i = 0; i < heros.size(); i++) {
 				// check win/lose status after every move of a hero/monster
 				int winStatus = this.detectWinLose(this.getBoard());
 				if (winStatus == 1) {
 					System.out.println("Heros win! Monsters lose!");
+					System.out.println("Thank you for playing!");
+					break game;
 				} else if (winStatus == -1) {
 					System.out.println("Heros lose! Monsters win!");
+					System.out.println("Thank you for playing!");
+					break game;
 				}
 
 				// if still on fight, then move on
@@ -75,7 +79,7 @@ public class LegendsOfValor extends RolePlayingGame {
 					String purchaseStatus = sc.nextLine();
 					if (purchaseStatus.equals("y") || purchaseStatus.equals("Y")) {
 						// enter the market
-						this.purchase((Market) heroOn);
+						this.purchase((Market) heroOn, i);
 					}
 				}
 				// move on
@@ -103,7 +107,7 @@ public class LegendsOfValor extends RolePlayingGame {
 						this.getBoard().getRowOfMonster(i), this.getBoard());
 				if (herosList.size() > 0) {
 					// the list of heros is not empty
-					System.out.println("Monster encounter a fight!");
+					System.out.println("Monster starts the fight!");
 					// start fight between the monster and the 1st hero in list
 					fight = new HeroMonsterFight(herosList.get(0), monsters.get(i));
 					fight.runFight();
@@ -114,7 +118,7 @@ public class LegendsOfValor extends RolePlayingGame {
 				// print board after the monster moves
 				System.out.println(this.getBoard());
 			}
-		} while (true);
+		}
 	}
 
 	// operate actions by the input number
@@ -219,13 +223,13 @@ public class LegendsOfValor extends RolePlayingGame {
 		System.out.println("A/a: move left");
 		System.out.println("S/s: move down");
 		System.out.println("D/d: move right");
+		System.out.println("B/b: back to nexus");
 		System.out.println("Q/q: quit game");
 		System.out.println("I/i: display information");
 		System.out.println("3. Use a potion");
 		System.out.println("4. Change weapon");
 		System.out.println("5. Change armor");
 		System.out.println("6. Teleport");
-		System.out.println("7. Back to Nexus");
 		status = 0;
 		do {
 			System.out.print("Please input the above letter to move: ");
@@ -242,41 +246,42 @@ public class LegendsOfValor extends RolePlayingGame {
 				}
 			}
 
-			// input action is 6||7
-			else if ((actionIndex = this.isDigit(str)) > 0 && actionIndex >= 6 && actionIndex <= 7) {
-				if (actionIndex == 6) {
-					int targetRow, targetCol;
-					while (true) {
-						System.out.println("Enter the target row: ");
-						String strTargetRow = sc.nextLine();
-						targetRow = this.isDigit(strTargetRow);
-						System.out.println("Enter the target column: ");
-						String strTargetCol = sc.nextLine();
-						targetCol = this.isDigit(strTargetCol);
+			// input action is 6
+			else if ((actionIndex = this.isDigit(str)) > 0 && actionIndex == 6) {
+				int targetRow, targetCol;
+				while (true) {
+					System.out.println("Enter the target row: ");
+					String strTargetRow = sc.nextLine();
+					targetRow = this.isDigit(strTargetRow);
+					System.out.println("Enter the target column: ");
+					String strTargetCol = sc.nextLine();
+					targetCol = this.isDigit(strTargetCol);
 
-						if (0 <= targetRow && targetRow <= this.getBoard().getRow() && 0 <= targetCol
-								&& targetCol <= this.getBoard().getCol()) {
-							boolean teleportable = this.detectTeleportable(heroIndex,
-									this.getBoard().getColOfHero(heroIndex), this.getBoard().getRowOfHero(heroIndex),
-									targetCol, targetRow, this.getBoard());
-							if (teleportable) {
-								this.getBoard().getHero(heroIndex).teleport(targetCol, targetRow, this.getBoard(),
-										heroIndex);
-								System.out.println("Hero " + this.getBoard().getHero(heroIndex).getName()
-										+ " successfully teleport to location (" + targetRow + "," + targetCol + ")!");
-								break;
-							}
+					if (0 <= targetRow && targetRow <= this.getBoard().getRow() && 0 <= targetCol
+							&& targetCol <= this.getBoard().getCol()) {
+						boolean teleportable = this.detectTeleportable(heroIndex,
+								this.getBoard().getColOfHero(heroIndex), this.getBoard().getRowOfHero(heroIndex),
+								targetCol, targetRow, this.getBoard());
+						if (teleportable) {
+							// teleport to the target location
+							this.getBoard().getHero(heroIndex).teleport(targetCol, targetRow, this.getBoard(),
+									heroIndex);
+							System.out.println("Hero " + this.getBoard().getHero(heroIndex).getName()
+									+ " successfully teleport to location (" + targetRow + "," + targetCol + ")!");
+							break;
 						} else {
-							System.out.println("Invalid input. Please reenter.");
+							// cannot teleport
+							System.out.println("Cannot teleport to the target position. Please reenter.");
 						}
+					} else {
+						System.out.println("Invalid input. Please reenter.");
 					}
-					this.getHeros().get(heroIndex).teleport(targetCol, targetRow, this.getBoard(), heroIndex);
-					status = 1;
-				} else if (actionIndex == 7) {
-					// hero.back(col, row, lb, index); //TODO:fix back
 				}
+				this.getHeros().get(heroIndex).teleport(targetCol, targetRow, this.getBoard(), heroIndex);
+				status = 1;
+
 			} else {
-				// input action is w||a||s||d||q||i
+				// input action is w||a||s||d||q||i||b
 				char c = this.isDirection(str);
 				if (c == ' ')
 					;
@@ -284,6 +289,13 @@ public class LegendsOfValor extends RolePlayingGame {
 					return 1;
 				} else if (c == 'i') {
 					this.displayHeros();
+				} else if (c == 'b') {
+					System.out.println("adjfhvndhaha");
+					// return back to nexus
+					this.getBoard().getHero(heroIndex).back(this.getBoard(), heroIndex);
+					System.out.println(
+							"Hero " + this.getBoard().getHero(heroIndex).getName() + " returns back to nexus.");
+					status = 1;
 				} else {
 					int movableHero = this.getBoard().moveOfHero(heroIndex, c);
 					if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
@@ -312,12 +324,11 @@ public class LegendsOfValor extends RolePlayingGame {
 		}
 	}
 
-	public int purchase(Market mk) {
+	public int purchase(Market mk, int heroIndex) {
 		Scanner sc = new Scanner(System.in);
 		String str;
 		boolean status1 = true;
 		int num1 = 0; // buy or sell
-		int num2 = 0; // the index of hero
 		int num3 = 0; // object type
 
 		System.out.println("You are at the market. ");
@@ -338,29 +349,6 @@ public class LegendsOfValor extends RolePlayingGame {
 					break;
 				}
 				if ((num1 = this.isDigit(str)) > 0 && (num1 == 1 || num1 == 2)) {
-					status2 = 1;
-				}
-			} while (status2 == 0);
-			// quit?
-			if (!status1)
-				break;
-
-			// select hero
-			System.out.println("======================================================");
-			for (int i = 0; i < this.getHeros().size(); i++) {
-				System.out.println((i + 1) + ". " + this.getHeros().get(i).getName());
-			}
-			System.out.println("(Type Q/q to quit)");
-			status2 = 0;
-			do {
-				System.out.print("Please select from the above hero(s): ");
-				str = sc.nextLine();
-				if (str.toLowerCase().equals("q")) {
-					status1 = false;
-					break;
-				}
-				if ((num2 = this.isDigit(str)) > 0 && num2 >= 1 && num2 <= this.getHeros().size()) {
-					num2 -= 1; // index of hero
 					status2 = 1;
 				}
 			} while (status2 == 0);
@@ -394,7 +382,7 @@ public class LegendsOfValor extends RolePlayingGame {
 			// Object to sell
 			status2 = 0;
 			do {
-				Hero hero = this.getHeros().get(num2);
+				Hero hero = this.getHeros().get(heroIndex);
 				String type = (num3 == 1 ? "weapon" : (num3 == 2 ? "armor" : (num3 == 3 ? "spell" : "potion")));
 				if (num1 == 2) {
 					List<BuyableObject> bos = hero.getOutfit().getCarryingWithType(type);
@@ -450,7 +438,7 @@ public class LegendsOfValor extends RolePlayingGame {
 		if (str.length() != 1)
 			return ' ';
 		char c = str.toLowerCase().charAt(0);
-		if (c == 'w' || c == 'a' || c == 's' || c == 'd' || c == 'q' || c == 'i')
+		if (c == 'w' || c == 'a' || c == 's' || c == 'd' || c == 'q' || c == 'i' || c == 'b')
 			return c;
 		else
 			return ' ';

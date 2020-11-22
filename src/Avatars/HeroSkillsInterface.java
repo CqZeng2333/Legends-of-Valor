@@ -8,7 +8,7 @@ public interface HeroSkillsInterface {
 	
 	public void teleport(int col, int row, LegendBoard lb, int index);
 	
-	public void back(int col, int row, LegendBoard lb, int index);
+	public void back(LegendBoard lb, int index);
 
 	public int drinkPotion(String potionName);
 
