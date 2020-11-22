@@ -67,7 +67,7 @@ public abstract class AccessibleTile extends Tile {
 		else if (heroOrMonster == 1) {
 			if (this.getContainer(1) == -1) return -1;
 			
-			this.setHasMonster(true);
+			this.setHasMonster(false);
 			this.setContainer(1, -1);
 			return 0;
 		}

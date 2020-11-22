@@ -29,7 +29,12 @@ public class LegendBoard extends Board {
 		//first row
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < this.board[i].length; j++) {
-				this.board[i][j] = new MonsterNexus();
+				if ((j + 1) % 3 == 0) {
+					this.board[i][j] = new InaccessibleTile();
+				}
+				else {
+					this.board[i][j] = new MonsterNexus();
+				}
 			}
 		}
 		//middle row
@@ -60,7 +65,12 @@ public class LegendBoard extends Board {
 		//last row
 		for (int i = this.board.length - 1; i < this.board.length; i++) {
 			for (int j = 0; j < this.board[i].length; j++) {
-				this.board[i][j] = new HeroNexus();
+				if ((j + 1) % 3 == 0) {
+					this.board[i][j] = new InaccessibleTile();
+				}
+				else {
+					this.board[i][j] = new HeroNexus();
+				}
 			}
 		}
 	}
@@ -142,6 +152,7 @@ public class LegendBoard extends Board {
 			
 			((AccessibleTile)this.board[rowOfHero][colOfHero]).moveOut(0);
 			colOfHero -= 1;
+			this.setColOfHero(i, colOfHero);
 			status = ((AccessibleTile)this.board[rowOfHero][colOfHero]).stepOn(0, i);
 		}
 		else if (direction == 's') {
@@ -152,6 +163,7 @@ public class LegendBoard extends Board {
 			
 			((AccessibleTile)this.board[rowOfHero][colOfHero]).moveOut(0);
 			rowOfHero += 1;
+			this.setRowOfHero(i, rowOfHero);
 			status = ((AccessibleTile)this.board[rowOfHero][colOfHero]).stepOn(0, i);
 		}
 		else if (direction == 'd') {
@@ -161,6 +173,7 @@ public class LegendBoard extends Board {
 			
 			((AccessibleTile)this.board[rowOfHero][colOfHero]).moveOut(0);
 			colOfHero += 1;
+			this.setColOfHero(i, colOfHero);
 			status = ((AccessibleTile)this.board[rowOfHero][colOfHero]).stepOn(0, i);
 		}
 		return status;
@@ -178,21 +191,21 @@ public class LegendBoard extends Board {
 		int colOfMonster = this.posOfMonster.get(i)[1];
 		
 		//on the edge or cannot access
-		if (rowOfMonster == this.board.length-1 || !this.board[rowOfMonster-1][colOfMonster].isAccessible()) return -1;
+		if (rowOfMonster == this.board.length-1 || !this.board[rowOfMonster+1][colOfMonster].isAccessible()) return -1;
 		//have hero in the side cell or in the same cell
 		if ((colOfMonster != 0 && this.board[rowOfMonster][colOfMonster-1].isAccessible()) && ((AccessibleTile)this.board[rowOfMonster][colOfMonster-1]).hasHero()
 			|| (colOfMonster != this.board.length-1 && this.board[rowOfMonster][colOfMonster+1].isAccessible()) && ((AccessibleTile)this.board[rowOfMonster][colOfMonster+1]).hasHero()
 			|| ((AccessibleTile)this.board[rowOfMonster][colOfMonster]).hasHero()) return -2;
-		//have hero in the cells behind
+		//have hero in the cells in front
 		if ((colOfMonster != 0 && this.board[rowOfMonster+1][colOfMonster-1].isAccessible()) && ((AccessibleTile)this.board[rowOfMonster+1][colOfMonster-1]).hasHero()
-			|| (colOfMonster != this.board.length-1 && this.board[rowOfMonster-1][colOfMonster+1].isAccessible()) && ((AccessibleTile)this.board[rowOfMonster-1][colOfMonster+1]).hasHero()
+			|| (colOfMonster != this.board.length-1 && this.board[rowOfMonster+1][colOfMonster+1].isAccessible()) && ((AccessibleTile)this.board[rowOfMonster+1][colOfMonster+1]).hasHero()
 			|| (((AccessibleTile)this.board[rowOfMonster+1][colOfMonster]).hasHero())) return -2;
 		//another monster behind
-		if (((AccessibleTile)this.board[rowOfMonster-1][colOfMonster]).hasMonster()) return -1;
+		if (((AccessibleTile)this.board[rowOfMonster+1][colOfMonster]).hasMonster()) return -1;
 		
 		((AccessibleTile)this.board[rowOfMonster][colOfMonster]).moveOut(1);
 		rowOfMonster += 1;
-		this.setRowOfHero(i, rowOfMonster);
+		this.setRowOfMonster(i, rowOfMonster);
 		status = ((AccessibleTile)this.board[rowOfMonster][colOfMonster]).stepOn(1, i);
 		return status;
 	}
@@ -238,8 +251,8 @@ public class LegendBoard extends Board {
 					else {
 						board += " ";
 					}
-					board += "| ";
 				}
+				board += "| ";
 			}
 			board += "\n";
 			
@@ -273,8 +286,14 @@ public class LegendBoard extends Board {
 	public int getRowOfMonster(int i) {
 		return posOfMonster.get(i)[0];
 	}
+	public void setRowOfMonster(int i, int rowOfMonster) {
+		this.posOfMonster.get(i)[0] = rowOfMonster;
+	}
 	public int getColOfMonster(int i) {
 		return posOfMonster.get(i)[1];
+	}
+	public void setColOfMonster(int i, int colOfMonster) {
+		this.posOfMonster.get(i)[1] = colOfMonster;
 	}
 	public Monster getMonster(int monsterIndex) {
 		return monsters.get(monsterIndex);
