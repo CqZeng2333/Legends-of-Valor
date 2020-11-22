@@ -5,26 +5,15 @@ package Avatars;
 import java.util.Random;
 
 public class Monster extends Avatar {
-	private String name;
-	private int level;
 	private double damage;
 	private double defense;
-	private double dodge_chance;
-	private String type;
-	private boolean isAlive;
-	private int HP;
-	
+	private double dodge_chance;	
 	
 	public Monster(String name, int level, int damage, int defense, int dodge_chance, String type) {
-		super();
-		this.name = new String(name);
-		this.level = level;
+		super(name,type,level,level * 100);
 		this.damage = damage;
 		this.defense = defense;
 		this.dodge_chance = dodge_chance;
-		this.type = new String(type);
-		this.isAlive = true;
-		this.HP = level * 100;
 	}
 
 	public double attack() {
@@ -77,18 +66,6 @@ public class Monster extends Avatar {
 		return "Name: "+this.name+" Type: "+this.type+" Level: "+this.level+" HP: "+this.HP+" Alive: "+this.isAlive+" Damage: "+this.damage+" Defense: "+this.defense;
 	}
 	
-	public String getName() {
-		return new String(name);
-	}
-	public void setName(String name) {
-		this.name = new String(name);
-	}
-	public int getLevel() {
-		return level;
-	}
-	public void setLevel(int minLevel) {
-		this.level = minLevel;
-	}
 	public double getDamage() {
 		return damage;
 	}
@@ -107,11 +84,5 @@ public class Monster extends Avatar {
 	public void setDodge_chance(int dodge_chance) {
 		this.dodge_chance = dodge_chance;
 	}
-
-	public boolean isAlive() {
-		return isAlive;
-	}
-	public String getType() {
-		return new String(type);
-	}
 }
+

@@ -11,25 +11,15 @@ import Equipments.*;
 import GameEnviroment.LegendBoard;
 
 public class Hero extends Avatar implements HeroSkillsInterface {
-	private String name;
 	private int mana;
 	private Map<String, Double> skills;
 	private int money;
 	private int exp;
-
-	private int level;
-	private int HP;
-	private boolean isAlive;
 	private Outfit outfit;
-	private String type;
-
-	public Hero() {
-	}
 
 	public Hero(String name, int mana, double strength, double agility, double dexterity, int money, int exp,
 			String type) {
-		super();
-		this.name = new String(name);
+		super(name,type,1,100);
 		this.mana = mana;
 		this.skills = new HashMap<>();
 		skills.put("strength", strength);
@@ -38,12 +28,7 @@ public class Hero extends Avatar implements HeroSkillsInterface {
 		skills.put("defense", (double) 0);
 		this.money = money;
 		this.exp = exp;
-
-		this.level = 1;
-		this.HP = 100 * this.level;
-		this.isAlive = true;
 		outfit = new Outfit();
-		this.type = new String(type);
 	}
 
 	public int levelUp() {
@@ -289,14 +274,6 @@ public class Hero extends Avatar implements HeroSkillsInterface {
 	}
 
 	// Getter and setter
-	public String getName() {
-		return new String(name);
-	}
-
-	public void setName(String name) {
-		this.name = new String(name);
-	}
-
 	public int getMana() {
 		return mana;
 	}
@@ -329,36 +306,8 @@ public class Hero extends Avatar implements HeroSkillsInterface {
 		this.exp = exp;
 	}
 
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
-	}
-
-	public int getHP() {
-		return HP;
-	}
-
-	public void setHP(int hP) {
-		HP = hP;
-	}
-
-	public boolean isAlive() {
-		return isAlive;
-	}
-
-	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
-	}
-
 	public Outfit getOutfit() {
 		return outfit;
-	}
-
-	public String getType() {
-		return type;
 	}
 
 }
