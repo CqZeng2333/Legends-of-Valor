@@ -18,7 +18,6 @@ import Map.Tile;
 
 public class LegendsOfValor extends RolePlayingGame {
 
-	public HeroMonsterFight fight;
 	private HeroFactory hf = new HeroFactory();
 
 	public void run() {
@@ -64,8 +63,7 @@ public class LegendsOfValor extends RolePlayingGame {
 						attackStatus = sc.nextLine();
 						if (attackStatus.equals("y") || attackStatus.equals("Y")) {
 							// start fight between the hero and the 1st monster in list
-							fight = new HeroMonsterFight(heros.get(i), monstersList.get(0));
-							fight.runFight();
+							this.fight(heros.get(i), monstersList.get(0));
 						}
 					} else {
 						// no monster nearby
@@ -109,8 +107,7 @@ public class LegendsOfValor extends RolePlayingGame {
 					// the list of heros is not empty
 					System.out.println("Monster starts the fight!");
 					// start fight between the monster and the 1st hero in list
-					fight = new HeroMonsterFight(herosList.get(0), monsters.get(i));
-					fight.runFight();
+					this.fight(herosList.get(0), monsters.get(i));
 				} else {
 					this.getBoard().moveOfMonster(i); // monster move forward
 				}
@@ -336,7 +333,6 @@ public class LegendsOfValor extends RolePlayingGame {
 		System.out.println(mk.displayObject());
 		System.out.println("======================================================");
 		System.out.println("Buy object with full price and sell object with half price. ");
-		this.displayHeros();
 
 		while (status1) {
 			// sell or buy
@@ -413,7 +409,7 @@ public class LegendsOfValor extends RolePlayingGame {
 					bo = mk.getBF().createBuyableObject(type, str);
 					if (hero.buyObject(bo) >= 0) {
 						System.out.println("Hero " + hero.getName() + " buys " + bo.getName() + ". ");
-						this.displayHeros();
+						// this.displayHeros();
 					} else {
 						System.out.println("Cannot buy this!");
 					}
@@ -421,7 +417,7 @@ public class LegendsOfValor extends RolePlayingGame {
 				} else { // sell
 					if (hero.sellObject(type, str) == 0) {
 						System.out.println("Hero " + hero.getName() + " sells " + str + ". ");
-						this.displayHeros();
+						// this.displayHeros();
 					} else {
 						System.out.println("Cannot sell this!");
 					}
@@ -461,36 +457,21 @@ public class LegendsOfValor extends RolePlayingGame {
 
 	public void fight(Hero hero, Monster monster) {
 		// pass hero and monster
-		fight = new HeroMonsterFight(hero, monster);
-		return;
-	}
-
-	public int action() {
-		/*
-		 * 1. move 2. buy 3. sell 4. teleport 5. back 6. attack 7. potion 8. weapon
-		 */
-		return 0;
+		HeroMonsterFight fight = new HeroMonsterFight(hero, monster);
+		fight.runFight();
 	}
 
 	// input col and row
 	// output a list of hero if there is any, null otherwise
-
 	public List<Hero> detectHeros(int col, int row, LegendBoard board) {
 		return detectStatus.detectHeros(col, row, board);
 	}
 
 	// input col and row
 	// output a list of monster if there is any, null otherwise
-
 	public List<Monster> detectMonsters(int col, int row, LegendBoard board) {
 		return detectStatus.detectMonsters(col, row, board);
 	}
-
-	// return 1 only movable for heroes, 2 movable both, -1 only movable for
-	// monsters, -2 not movable for both
-//	public int detectMovable(int heroCol, int heroRow, char direction, LegendBoard board) {
-//		return detectStatus.detectMovable(heroRow, heroCol, direction, board);
-//	}
 
 	// return true if it is teleportable else false
 	public boolean detectTeleportable(int heroIndex, int heroCol, int heroRow, int col, int row, LegendBoard board) {
