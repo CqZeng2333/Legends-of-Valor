@@ -30,7 +30,10 @@ GameEnvironment
 ==========================================================
 LegendsOfValor is the main body of the game. It has RolePlayingGame as base class. 
 HeroMonsterFight is a class for fight between a hero and a monster.
-It also has a detectStatus class to detect status for actions, i.e. detect monsters around hero, detect whether a location is teleportable for a hero, detect win or lose of the game, etc.
+It also has a detectStatus class to detect status of different types of actions, i.e. detect monsters around hero, detect whether a location is teleportable for a hero, detect win or lose of the game, etc.
+
+Help files:
+The help files with data are located at Legends_Monsters_and_Heros folder.
 
 Compile and Run:
 The Main.java is the entrance to run the game. 
