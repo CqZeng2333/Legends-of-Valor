@@ -35,6 +35,7 @@ public abstract class Tile {
 		this.type = new String(type);
 	}
 
+	//input 0 to get the index of hero, input 1 to get the index of monster in the tile
 	public int getContainer(int who) {
 		if (who < container.length)
 			return container[who];

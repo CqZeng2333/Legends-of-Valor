@@ -215,9 +215,9 @@ public class LegendBoard extends Board {
 	 */
 	@Override
 	public String toString() {
-		final String ANSI_RESET = "";//"\033[0m";
-		final String ANSI_BLUE = "";// "\033[0;34m";
-		final String ANSI_RED = "";// "\033[0;31m";
+		final String ANSI_RESET = "\033[0m";
+		final String ANSI_BLUE = "\033[0;34m";
+		final String ANSI_RED = "\033[0;31m";
 		char mk;
 		String board = "";
 		for (int i = 0; i < this.getRow(); i++) {

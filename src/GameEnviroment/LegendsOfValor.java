@@ -46,28 +46,26 @@ public class LegendsOfValor extends RolePlayingGame {
 				Tile heroOn = this.getBoard().getAGrid(this.getBoard().getRowOfHero(i),
 						this.getBoard().getColOfHero(i));
 				String type = heroOn.getType();
-
-				if (!type.equals("market") && !type.equals("inaccessible_tile")) {
+				if (!type.equals("hero_nexus") && !type.equals("inaccessible_tile")) {
 					// hero in tile where a fight can happen
-					if (this.detectMonsters(this.getBoard().getColOfHero(i), this.getBoard().getRowOfHero(i),
-							this.getBoard()) != null) {
+					List<Monster> monstersList = this.detectMonsters(this.getBoard().getColOfHero(i),
+							this.getBoard().getRowOfHero(i), this.getBoard());
+					if (monstersList.size() > 0) {
 						// the list of monsters is not empty
 						System.out.println("You encounter a fight!");
 						// start fight between the hero and the 1st monster in list
-						fight = new HeroMonsterFight(heros.get(i), this.detectMonsters(this.getBoard().getColOfHero(i),
-								this.getBoard().getRowOfHero(i), this.getBoard()).get(0));
+						fight = new HeroMonsterFight(heros.get(i), monstersList.get(0));
 						fight.runFight();
 					} else {
 						// no monster nearby
 						System.out.println("This is a safe place!");
 					}
-				} else if (type.equals("market")) {
+				} else if (type.equals("hero_nexus")) {
 					this.purchase((Market) heroOn);
 				}
 				// move on
 
 				System.out.println("======================================================");
-				System.out.println(this.getBoard());
 				int status = this.move(i);
 				if (status == 1) {
 					System.out.println("You quit the game!");
@@ -81,19 +79,20 @@ public class LegendsOfValor extends RolePlayingGame {
 				String type = monsterOn.getType();
 
 				// check if there are heros nearby
-				if (this.detectHeros(this.getBoard().getColOfMonster(i), this.getBoard().getRowOfMonster(i),
-						this.getBoard()) != null) {
+				List<Hero> herosList = this.detectHeros(this.getBoard().getColOfMonster(i),
+						this.getBoard().getRowOfMonster(i), this.getBoard());
+				if (herosList.size() > 0) {
 					// the list of heros is not empty
 					System.out.println("Monster encounter a fight!");
 					// start fight between the monster and the 1st hero in list
-					fight = new HeroMonsterFight(this.detectHeros(this.getBoard().getColOfMonster(i),
-							this.getBoard().getRowOfMonster(i), this.getBoard()).get(0), monsters.get(i));
+					fight = new HeroMonsterFight(herosList.get(0), monsters.get(i));
 					fight.runFight();
-				}
-				else {
-					this.getBoard().moveOfMonster(i); //monster move forward
+				} else {
+					this.getBoard().moveOfMonster(i); // monster move forward
 				}
 			}
+			// print the board after heros and monsters move and the round ends
+			System.out.println(this.getBoard());
 		} while (true);
 	}
 
@@ -238,7 +237,7 @@ public class LegendsOfValor extends RolePlayingGame {
 			} else {
 				int movableHero = this.getBoard().moveOfHero(heroIndex, c);
 				if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
-					System.out.println(this.getBoard());
+					//System.out.println(this.getBoard());
 					status = 1;
 				} else {
 					System.out.println("Cannot access this place!");

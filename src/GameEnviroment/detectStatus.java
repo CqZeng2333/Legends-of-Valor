@@ -9,7 +9,7 @@ import Map.Tile;
 
 public class detectStatus {
 	// input col and row
-	// output a list of monsters or heroes if there is any, null otherwise 
+	// output a list of monsters or heroes nearby
 	public static List<Hero> detectHeros(int col, int row, LegendBoard board) {
 		List<Hero> list = new ArrayList<>();
 		// eight cell around it
@@ -25,9 +25,10 @@ public class detectStatus {
 				}
 				Tile tile = board.getAGrid(i, j);
 				if(tile.isAccessible()) {
+					// get the index of hero in the tile
 					int index = tile.getContainer(0);
 					// the container of hero is not empty
-					if(tile.getContainer(1) >= 0) {
+					if(index >= 0) {
 						list.add(board.getHero(index));
 					}
 				}
@@ -51,9 +52,10 @@ public class detectStatus {
 				}
 				Tile tile = board.getAGrid(i, j);
 				if(tile.isAccessible()) {
+					//get index of monster in the tile
 					int index = tile.getContainer(1);
 					// the container of monster is not empty
-					if(tile.getContainer(1) >= 0) {
+					if(index >= 0) {
 						list.add(board.getMonster(index));
 					}
 				}
