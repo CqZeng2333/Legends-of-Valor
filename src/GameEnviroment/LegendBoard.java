@@ -120,6 +120,32 @@ public class LegendBoard extends Board {
 	}
 	
 	/*
+	 * Create 3 new monsters in each lane
+	 */
+	public void createNewMonsters() {
+		Random rd = new Random();
+		int level = this.getHighestLevel();
+		for (int i = 0; i < heros.size(); i++) {
+			//get the position of monster
+			int[] pos = new int[2];
+			pos[0] = 0;
+			pos[1] = rd.nextInt(this.board.length) < 0.5 ? 3*i : 3*i+1; //randomly put in the left or right of a lane
+			//this Nexus already has monster
+			if (((AccessibleTile) this.board[pos[0]][pos[1]]).hasMonster()) {
+				pos[1] = pos[1] % 3 == 0 ? 3*i+1 : 3*i;
+				// both Nexuses in this lane have monster
+				if (((AccessibleTile) this.board[pos[0]][pos[1]]).hasMonster()) continue;
+			}
+			
+			this.posOfMonster.add(pos);
+			//Monster Nexus create a monster
+			Monster monster = (Monster) ((MonsterNexus)this.board[pos[0]][pos[1]]).produceCharacter(level);
+			monsters.add(monster);
+			((AccessibleTile) this.board[pos[0]][pos[1]]).stepOn(1, this.monsters.size()-1);
+		}
+	}
+	
+	/*
 	 * Hero i move a pace according to the direction
 	 * Return -1 if cannot access
 	 * Return -2 if there is a monster on the way
@@ -223,7 +249,44 @@ public class LegendBoard extends Board {
 		int rowOfMonster = this.posOfMonster.get(i)[0];
 		int colOfMonster = this.posOfMonster.get(i)[1];
 		((AccessibleTile)this.board[rowOfMonster][colOfMonster]).moveOut(1);
-		this.monsters.remove(i);
+		this.monsters.set(i, null);
+		this.posOfMonster.set(i, null);
+		return 0;
+	}
+	
+	/*
+	 * Hero i go back to his Nexus
+	 */
+	public int heroBack(int iOfHero) {
+		Random rd = new Random();
+		//get the new position of hero
+		int[] newPos = new int[2];
+		newPos[0] = 0;
+		newPos[1] = rd.nextInt(this.board.length) < 0.5 ? 3*iOfHero : 3*iOfHero+1; //randomly put in the left or right of a lane
+		
+		//change position
+		int[] oldPos = this.posOfHero.get(iOfHero);
+		((AccessibleTile) this.board[oldPos[0]][oldPos[1]]).moveOut(0);
+		this.posOfHero.set(iOfHero, newPos);
+		((AccessibleTile) this.board[newPos[0]][newPos[1]]).stepOn(0, iOfHero);
+		return 0;
+	}
+	
+	/*
+	 * Hero i teleport to a new position(row, col)
+	 */
+	public int heroTeleport(int iOfHero, int row, int col) {
+		if (!this.board[row][col].isAccessible()) return -1; // cannot teleport to inaccessible cell
+		
+		int[] newPos = new int[2];
+		newPos[0] = row;
+		newPos[1] = col;
+		
+		//change position
+		int[] oldPos = this.posOfHero.get(iOfHero);
+		((AccessibleTile) this.board[oldPos[0]][oldPos[1]]).moveOut(0);
+		this.posOfHero.set(iOfHero, newPos);
+		((AccessibleTile) this.board[newPos[0]][newPos[1]]).stepOn(0, iOfHero);
 		return 0;
 	}
 	
@@ -238,6 +301,13 @@ public class LegendBoard extends Board {
 		char mk;
 		String board = "";
 		for (int i = 0; i < this.getRow(); i++) {
+			board += "  ";
+			for (int j = 0; j < this.getCol(); j++) {
+				board += "   " + j + "    ";
+			}
+			board += "\n\n";
+			
+			board += "  ";
 			for (int j = 0; j < this.getCol(); j++) {
 				mk = this.board[i][j].getMark();
 				if (mk == 'N' && i == 0) board += ANSI_RED;
@@ -247,6 +317,7 @@ public class LegendBoard extends Board {
 			}
 			board += "\n";
 			
+			board += i + " ";
 			for (int j = 0; j < this.getCol(); j++) {
 				board += "|";
 				if (this.board[i][j].getType().equals("inaccessible_tile")) {
@@ -273,6 +344,7 @@ public class LegendBoard extends Board {
 			}
 			board += "\n";
 			
+			board += "  ";
 			for (int j = 0; j < this.getCol(); j++) {
 				mk = this.board[i][j].getMark();
 				if (mk == 'N' && i == 0) board += ANSI_RED;
