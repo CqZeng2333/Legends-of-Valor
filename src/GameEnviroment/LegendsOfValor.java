@@ -46,16 +46,23 @@ public class LegendsOfValor extends RolePlayingGame {
 				Tile heroOn = this.getBoard().getAGrid(this.getBoard().getRowOfHero(i),
 						this.getBoard().getColOfHero(i));
 				String type = heroOn.getType();
+				String attackStatus = ""; // whether the hero choose to attack
 				if (!type.equals("hero_nexus") && !type.equals("inaccessible_tile")) {
 					// hero in tile where a fight can happen
 					List<Monster> monstersList = this.detectMonsters(this.getBoard().getColOfHero(i),
 							this.getBoard().getRowOfHero(i), this.getBoard());
 					if (monstersList.size() > 0) {
 						// the list of monsters is not empty
-						System.out.println("You encounter a fight!");
-						// start fight between the hero and the 1st monster in list
-						fight = new HeroMonsterFight(heros.get(i), monstersList.get(0));
-						fight.runFight();
+						System.out.println("You encounter a fight! Do you want to attack?");
+						System.out.println("Enter Y|y to attack. Enter anything else to move on: ");
+
+						Scanner sc = new Scanner(System.in);
+						attackStatus = sc.nextLine();
+						if (attackStatus.equals("y") || attackStatus.equals("Y")) {
+							// start fight between the hero and the 1st monster in list
+							fight = new HeroMonsterFight(heros.get(i), monstersList.get(0));
+							fight.runFight();
+						}
 					} else {
 						// no monster nearby
 						System.out.println("This is a safe place!");
@@ -66,11 +73,16 @@ public class LegendsOfValor extends RolePlayingGame {
 				// move on
 
 				System.out.println("======================================================");
-				int status = this.move(i);
-				if (status == 1) {
-					System.out.println("You quit the game!");
-					System.exit(0); // quit
+				if (!attackStatus.equals("y") && !attackStatus.equals("Y")) {
+					// attack counts as an action, if the hero attacks then no need for extra action
+					int status = this.move(i);
+					if (status == 1) {
+						System.out.println("You quit the game!");
+						System.exit(0); // quit
+					}
 				}
+				// print board after the hero moves
+				System.out.println(this.getBoard());
 			}
 			// iterate through all monster
 			for (int i = 0; i < monsters.size(); i++) {
@@ -90,9 +102,10 @@ public class LegendsOfValor extends RolePlayingGame {
 				} else {
 					this.getBoard().moveOfMonster(i); // monster move forward
 				}
+
+				// print board after the monster moves
+				System.out.println(this.getBoard());
 			}
-			// print the board after heros and monsters move and the round ends
-			System.out.println(this.getBoard());
 		} while (true);
 	}
 
@@ -198,7 +211,7 @@ public class LegendsOfValor extends RolePlayingGame {
 		Scanner sc = new Scanner(System.in);
 		String str;
 		int actionIndex; // index of action
-		int status, status2;
+		int status;
 		System.out.println("======================================================");
 		System.out.println("W/w: move up");
 		System.out.println("A/a: move left");
@@ -237,7 +250,7 @@ public class LegendsOfValor extends RolePlayingGame {
 			} else {
 				int movableHero = this.getBoard().moveOfHero(heroIndex, c);
 				if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
-					//System.out.println(this.getBoard());
+					// System.out.println(this.getBoard());
 					status = 1;
 				} else {
 					System.out.println("Cannot access this place!");
