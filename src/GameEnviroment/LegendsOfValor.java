@@ -68,7 +68,15 @@ public class LegendsOfValor extends RolePlayingGame {
 						System.out.println("This is a safe place!");
 					}
 				} else if (type.equals("hero_nexus")) {
-					this.purchase((Market) heroOn);
+					System.out.println("You are in the Heors Nexus. Do you want to enter the market?");
+					System.out.println("Enter Y|y to enter the market. Enter anything else to move on: ");
+
+					Scanner sc = new Scanner(System.in);
+					String purchaseStatus = sc.nextLine();
+					if (purchaseStatus.equals("y") || purchaseStatus.equals("Y")) {
+						// enter the market
+						this.purchase((Market) heroOn);
+					}
 				}
 				// move on
 
@@ -197,12 +205,6 @@ public class LegendsOfValor extends RolePlayingGame {
 					return new String[] { "change_armor", str };
 				}
 			} while (status == 0);
-		} else if (actionNum == 6) {// teleport
-			// hero.teleport(col, row, index); //TODO:fix teleport
-			return null;
-		} else if (actionNum == 7) {// back to nexus
-			// hero.back(col, row, lb, index); //TODO:fix back
-			return null;
 		}
 		return null;
 	}
@@ -229,31 +231,66 @@ public class LegendsOfValor extends RolePlayingGame {
 			System.out.print("Please input the above letter to move: ");
 			str = sc.nextLine();
 
-			// input action is 3||4||5||6||7
-			if ((actionIndex = this.isDigit(str)) > 0 && actionIndex >= 3 && actionIndex <= 7) {
+			// input action is 3||4||5
+			if ((actionIndex = this.isDigit(str)) > 0 && actionIndex >= 3 && actionIndex <= 5) {
 				String[] action = LegendsOfValor.inputActionData(this.getHeros().get(heroIndex), actionIndex);
 				if (action != null) {
 					this.heroActionInPeace(heroIndex, action);
+					status = 1;
 				} else {
 					System.out.println("You cannot do this!");
 				}
 			}
 
-			// input action is w||a||s||d||q||i
-			char c = this.isDirection(str);
-			if (c == ' ')
-				;
-			else if (c == 'q') {
-				return 1;
-			} else if (c == 'i') {
-				this.displayHeros();
-			} else {
-				int movableHero = this.getBoard().moveOfHero(heroIndex, c);
-				if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
-					// System.out.println(this.getBoard());
+			// input action is 6||7
+			else if ((actionIndex = this.isDigit(str)) > 0 && actionIndex >= 6 && actionIndex <= 7) {
+				if (actionIndex == 6) {
+					int targetRow, targetCol;
+					while (true) {
+						System.out.println("Enter the target row: ");
+						String strTargetRow = sc.nextLine();
+						targetRow = this.isDigit(strTargetRow);
+						System.out.println("Enter the target column: ");
+						String strTargetCol = sc.nextLine();
+						targetCol = this.isDigit(strTargetCol);
+
+						if (0 <= targetRow && targetRow <= this.getBoard().getRow() && 0 <= targetCol
+								&& targetCol <= this.getBoard().getCol()) {
+							boolean teleportable = this.detectTeleportable(heroIndex,
+									this.getBoard().getColOfHero(heroIndex), this.getBoard().getRowOfHero(heroIndex),
+									targetCol, targetRow, this.getBoard());
+							if (teleportable) {
+								this.getBoard().getHero(heroIndex).teleport(targetCol, targetRow, this.getBoard(),
+										heroIndex);
+								System.out.println("Hero " + this.getBoard().getHero(heroIndex).getName()
+										+ " successfully teleport to location (" + targetRow + "," + targetCol + ")!");
+								break;
+							}
+						} else {
+							System.out.println("Invalid input. Please reenter.");
+						}
+					}
+					this.getHeros().get(heroIndex).teleport(targetCol, targetRow, this.getBoard(), heroIndex);
 					status = 1;
+				} else if (actionIndex == 7) {
+					// hero.back(col, row, lb, index); //TODO:fix back
+				}
+			} else {
+				// input action is w||a||s||d||q||i
+				char c = this.isDirection(str);
+				if (c == ' ')
+					;
+				else if (c == 'q') {
+					return 1;
+				} else if (c == 'i') {
+					this.displayHeros();
 				} else {
-					System.out.println("Cannot access this place!");
+					int movableHero = this.getBoard().moveOfHero(heroIndex, c);
+					if (movableHero != -1) { // 0 for successful move, -1 for cannot access, -2 for monster on the way
+						status = 1;
+					} else {
+						System.out.println("Cannot access this place!");
+					}
 				}
 			}
 		} while (status == 0);
