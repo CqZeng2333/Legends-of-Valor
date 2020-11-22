@@ -2,6 +2,9 @@ package GameEnviroment;
 
 import Avatars.Hero;
 import Avatars.Monster;
+import Avatars.Paladin;
+import Avatars.Sorcerer;
+import Avatars.Warrior;
 import Equipments.Armor;
 import Equipments.BuyableObject;
 import Equipments.Potion;
@@ -30,7 +33,7 @@ public class HeroMonsterFight {
 	}
 
 	
-	public void runFight() {
+	public int runFight() {
 		while (hero.isAlive() && monster.isAlive()) {
 			System.out.println("======================================================");
 			System.out.println("Hero "+ANSI_BLUE+hero.getName()+ANSI_RESET+" VS Monster "+ANSI_RED+monster.getName()+ANSI_RESET);
@@ -65,8 +68,19 @@ public class HeroMonsterFight {
 					}
 				}
 			}
-			
+			if (monster.isAlive()) {
+				monsterTurn();
+			}
+			if (!monster.isAlive()) {
+				settle(true, 100 * monster.getLevel(), 2);
+				return 0;
+			}
+			if (!hero.isAlive()) {
+				hero.revive();
+				return 1;
+			}
 		}
+		return -1;
 	}
 	
 	public int heroTurn(String[] action) {
@@ -140,89 +154,24 @@ public class HeroMonsterFight {
 		return status;
 	}
 
-//	private String[] inputActionData (Hero hero, int actionNum) {
-//		Scanner sc = new Scanner(System.in);
-//		String str;
-//		int status;
-//		
-//		if (actionNum == 1) { // attack
-//			return new String[] {"attack"};
-//		}
-//		else if (actionNum == 2) {// cast a spell, maybe no spell
-//			List<BuyableObject> spells = hero.getOutfit().getSpellCarrying();
-//			if (spells.size() == 0) return null;
-//			
-//			System.out.print("Your spells: ");
-//			for (BuyableObject s : spells) System.out.print(s.getName() + " ");
-//			System.out.print("\n");
-//			do {
-//				System.out.print("Please select from the above spell(s): ");
-//				str = sc.nextLine();
-//				Spell s = hero.getOutfit().getSpellWithName(str);
-//				if (s == null) status = 0;
-//				else {
-//					status = 1;
-//					return new String[] {"spell", str};
-//				}
-//			} while (status == 0);
-//		}
-//		else if (actionNum == 3) { // use a potion
-//			List<BuyableObject> potions = hero.getOutfit().getPotionCarrying();
-//			if (potions.size() == 0) return null;
-//			
-//			System.out.print("Your potions: ");
-//			for (BuyableObject p : potions) System.out.print(p.getName() + " ");
-//			System.out.print("\n");
-//			do {
-//				System.out.print("Please select from the above potion(s): ");
-//				str = sc.nextLine();
-//				Potion p = hero.getOutfit().getPotionWithName(str);
-//				if (p == null) status = 0;
-//				else {
-//					status = 1;
-//					return new String[] {"potion", str};
-//				}
-//			} while (status == 0);
-//		}
-//		else if (actionNum == 4) { // change weapon
-//			List<BuyableObject> weapons = hero.getOutfit().getWeaponCarrying();
-//			if (weapons.size() == 0) return null;
-//			
-//			System.out.print("Your weapons: ");
-//			for (BuyableObject w : weapons) System.out.print(w.getName() + " ");
-//			System.out.print("\n");
-//			do {
-//				System.out.print("Please select from the above weapon(s): ");
-//				str = sc.nextLine();
-//				Weapon w = hero.getOutfit().getWeaponWithName(str);
-//				if (w == null) status = 0;
-//				else {
-//					status = 1;
-//					return new String[] {"change_weapon", str};
-//				}
-//			} while (status == 0);
-//		}
-//		else if (actionNum == 5) { // change armor
-//			List<BuyableObject> armors = hero.getOutfit().getArmorCarrying();
-//			if (armors.size() == 0) return null;
-//			
-//			System.out.print("Your armors: ");
-//			for (BuyableObject a : armors) System.out.print(a.getName() + " ");
-//			System.out.print("\n");
-//			do {
-//				System.out.print("Please select from the above armor(s): ");
-//				str = sc.nextLine();
-//				Armor a = hero.getOutfit().getArmorWithName(str);
-//				if (a == null) status = 0;
-//				else {
-//					status = 1;
-//					return new String[] {"change_armor", str};
-//				}
-//			} while (status == 0);
-//		}
-//		return null;
-//	}
-//	
+	public void settle(boolean win, int money, int exp) {
+		final String ANSI_RESET = "\033[0m";
+		final String ANSI_BLUE = "\033[0;34m";
+		final String ANSI_RED = "\033[0;31m";
+		
+		String type = hero.getType();
+		int success = -1;
+		if (type.equals("warrior")) {
+			success = ((Warrior)hero).levelUp();
+		}
+		else if (type.equals("sorcerer")) {
+			success = ((Sorcerer)hero).levelUp();
+		}
+		else if (type.equals("paladin")) {
+			success = ((Paladin)hero).levelUp();
+		}
+		if (success == 0) System.out.println("Hero "+ANSI_BLUE+hero.getName()+ANSI_RESET+" levels up!");
+	}
 	
 	private int isDigit(String string) {
 		if (string.matches("\\d+")) {
