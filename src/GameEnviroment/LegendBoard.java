@@ -225,7 +225,7 @@ public class LegendBoard extends Board {
 				mk = this.board[i][j].getMark();
 				if (mk == 'N' && i == 0) board += ANSI_RED;
 				if (mk == 'N' && i == this.getRow()-1) board += ANSI_BLUE;
-				board += mk+"-"+mk+"-"+mk+" ";
+				board += mk+"--"+mk+"--"+mk+" ";
 				if (mk == 'N') board += ANSI_RESET;
 			}
 			board += "\n";
@@ -233,7 +233,7 @@ public class LegendBoard extends Board {
 			for (int j = 0; j < this.getCol(); j++) {
 				board += "|";
 				if (this.board[i][j].getType().equals("inaccessible_tile")) {
-					board += "XXX";
+					board += "XXXXX";
 				}
 				else {
 					if (((AccessibleTile)this.board[i][j]).hasHero()) {
@@ -241,7 +241,7 @@ public class LegendBoard extends Board {
 						board += ANSI_BLUE + "H" + (hi+1) + ANSI_RESET;
 					}
 					else {
-						board += " ";
+						board += "  ";
 					}
 					board += " ";
 					if (((AccessibleTile)this.board[i][j]).hasMonster()) {
@@ -249,7 +249,7 @@ public class LegendBoard extends Board {
 						board += ANSI_RED + "M" + (mi+1) + ANSI_RESET;
 					}
 					else {
-						board += " ";
+						board += "  ";
 					}
 				}
 				board += "| ";
@@ -260,7 +260,7 @@ public class LegendBoard extends Board {
 				mk = this.board[i][j].getMark();
 				if (mk == 'N' && i == 0) board += ANSI_RED;
 				if (mk == 'N' && i == this.getRow()-1) board += ANSI_BLUE;
-				board += mk+"-"+mk+"-"+mk+" ";
+				board += mk+"--"+mk+"--"+mk+" ";
 				if (mk == 'N') board += ANSI_RESET;
 			}
 			board += "\n\n";
