@@ -5,7 +5,7 @@ package Map;
 public abstract class Tile {
 	private final boolean accessible;
 	private char mark;
-	private final String type;
+	private String type;
 	// a 2-width container, container[0] carrying the index of hero, 
 	// and container[1] carrying the index of monster.
 	//The value is -1 if no one in it; -2 if the tile is inaccessible
@@ -30,6 +30,9 @@ public abstract class Tile {
 	}
 	public String getType() {
 		return type;
+	}
+	public void setType(String type) {
+		this.type = new String(type);
 	}
 
 	public int getContainer(int who) {

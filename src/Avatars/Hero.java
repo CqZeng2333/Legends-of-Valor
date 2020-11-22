@@ -261,10 +261,14 @@ public class Hero extends Avatar implements HeroSkillsInterface {
 	}
 	
 	public void teleport(int col, int row, LegendBoard lb, int index) {
+		lb.setRowOfHero(index, row);
+		lb.setColOfHero(index, col);
 		return;
 	}
 	
 	public void back(int col, int row, LegendBoard lb, int index) {
+		lb.setRowOfHero(index, row);
+		lb.setColOfHero(index, col);
 		return;
 	}
 	

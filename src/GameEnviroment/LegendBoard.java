@@ -280,20 +280,20 @@ public class LegendBoard extends Board {
 	public void setColOfHero(int i, int colOfHero) {
 		this.posOfHero.get(i)[1] = colOfHero;
 	}
+	public Hero getHero(int heroIndex) {
+		return heros.get(heroIndex);
+	}
 	public int getRowOfMonster(int i) {
 		return posOfMonster.get(i)[0];
 	}
 	public void setRowOfMonster(int i, int rowOfMonster) {
- 		this.posOfMonster.get(i)[0] = rowOfMonster;
+		this.posOfMonster.get(i)[0] = rowOfMonster;
 	}
 	public int getColOfMonster(int i) {
 		return posOfMonster.get(i)[1];
 	}
 	public void setColOfMonster(int i, int colOfMonster) {
 		this.posOfMonster.get(i)[1] = colOfMonster;
-	}
-	public Hero getHero(int heroIndex) {
-		return heros.get(heroIndex);
 	}
 	public Monster getMonster(int monsterIndex) {
 		return monsters.get(monsterIndex);
