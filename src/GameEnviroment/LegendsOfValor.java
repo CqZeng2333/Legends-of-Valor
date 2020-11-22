@@ -11,7 +11,7 @@ import Equipments.BuyableObject;
 import Equipments.Potion;
 import Equipments.Spell;
 import Equipments.Weapon;
-import Map.HeroFactory;
+import Map.LegendBoard;
 import Map.Market;
 import Map.Plain;
 import Map.Tile;

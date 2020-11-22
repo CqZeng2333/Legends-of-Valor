@@ -5,6 +5,7 @@ import java.util.List;
 
 import Avatars.Hero;
 import Avatars.Monster;
+import Map.LegendBoard;
 import Map.Tile;
 
 public class detectStatus {

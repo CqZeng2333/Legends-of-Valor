@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import Equipments.*;
-import GameEnviroment.LegendBoard;
+import Map.LegendBoard;
 
 public class Hero extends Avatar implements HeroSkillsInterface {
 	private int mana;

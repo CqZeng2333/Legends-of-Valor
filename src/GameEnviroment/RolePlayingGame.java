@@ -5,6 +5,7 @@ package GameEnviroment;
 import java.util.List;
 
 import Avatars.Hero;
+import Map.LegendBoard;
 import Map.Plain;
 
 public abstract class RolePlayingGame {

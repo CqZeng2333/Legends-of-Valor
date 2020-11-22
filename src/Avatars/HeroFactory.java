@@ -1,4 +1,4 @@
-package Map;
+package Avatars;
 /*
  * A factory that read the property of all the hero from txt files
  * and output hero according to the hero type(warrior, warrior or paladin) and name
@@ -7,11 +7,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
-
-import Avatars.Hero;
-import Avatars.Paladin;
-import Avatars.Sorcerer;
-import Avatars.Warrior;
 
 public class HeroFactory {
 	private Map<String, Map<String, Integer>> warrior;

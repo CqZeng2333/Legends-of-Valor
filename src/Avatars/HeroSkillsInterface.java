@@ -1,7 +1,7 @@
 package Avatars;
 
 import Equipments.BuyableObject;
-import GameEnviroment.LegendBoard;
+import Map.LegendBoard;
 
 public interface HeroSkillsInterface {
 	public double castSpell(String spellName);

@@ -1,4 +1,4 @@
-package GameEnviroment;
+package Map;
 
 /*
  * A concrete gameboard for Legends
@@ -9,16 +9,6 @@ import java.util.Random;
 
 import Avatars.Hero;
 import Avatars.Monster;
-import Map.AccessibleTile;
-import Map.Board;
-import Map.Bush;
-import Map.Cave;
-import Map.HeroNexus;
-import Map.InaccessibleTile;
-import Map.Koulou;
-import Map.MonsterNexus;
-import Map.Plain;
-import Map.Buff;
 
 public class LegendBoard extends Board {
 	private List<Hero> heros;

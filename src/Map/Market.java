@@ -1,5 +1,6 @@
 package Map;
 
+import Equipments.BuyableFactory;
 import Equipments.BuyableObject;
 
 public class Market extends AccessibleTile {

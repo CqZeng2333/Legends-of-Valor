@@ -1,5 +1,6 @@
 package Map;
 import Avatars.Avatar;
+import Avatars.MonsterFactory;
 
 /*
  * The Nexus for monster with the function of monster born

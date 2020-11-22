@@ -1,15 +1,10 @@
-package Map;
+package Avatars;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import Avatars.Dragon;
-import Avatars.Exoskeleton;
-import Avatars.Monster;
-import Avatars.Spirit;
 
 public class MonsterFactory {
 	private Map<String, Map<String, Integer>> dragon;

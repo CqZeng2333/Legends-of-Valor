@@ -1,4 +1,4 @@
-package Map;
+package Equipments;
 /*
  * A factory that read the property of all the buyable object from txt files
  * and output buyable objects according to the object type(weapon, armor, potion or spell) and name
