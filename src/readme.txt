@@ -4,7 +4,7 @@ Some changes is made to the txt files in order to ease the read-in process.
 
 !!!!!!!!!!!!!!!!!!!!The console must support ANSI to make the output colorful!!!!!!!!!!!!!! Or messy codes may appear. 
 
-For the readability of code, the game is mainly devided into 4 packages: Avatars, Equipments, Map and GameEnvironment:
+For the readability of code, the game is mainly divided into 4 packages: Avatars, Equipments, Map and GameEnvironment:
 
 Avatars
 ==========================================================

@@ -347,13 +347,15 @@ public class LegendBoard extends Board {
 		final String ANSI_RED = "\033[0;31m";
 		char mk;
 		String board = "";
+		
+		// index of column
+		board += "  ";
+		for (int j = 0; j < this.getCol(); j++) {
+			board += "   " + j + "    ";
+		}
+		board += "\n\n";
+		// each row
 		for (int i = 0; i < this.getRow(); i++) {
-			board += "  ";
-			for (int j = 0; j < this.getCol(); j++) {
-				board += "   " + j + "    ";
-			}
-			board += "\n\n";
-
 			board += "  ";
 			for (int j = 0; j < this.getCol(); j++) {
 				mk = this.board[i][j].getMark();

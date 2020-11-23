@@ -8,9 +8,13 @@ import Avatars.Hero;
 import Map.LegendBoard;
 import Map.Plain;
 
-public abstract class RolePlayingGame {
+public abstract class RolePlayingGame extends Game {
 	private List<Hero> heros;
 	private LegendBoard board;
+	
+	public RolePlayingGame() {
+		super("role_playing_game");
+	}
 	
 	public void initialize(List<Hero> heros, int boardSize) {
 		this.heros = heros;

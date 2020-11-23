@@ -79,7 +79,7 @@ public class LegendsOfValor extends RolePlayingGame {
 						System.out.println("This is a safe place!");
 					}
 				} else if (type.equals("hero_nexus")) {
-					System.out.println("You are in the Heors Nexus. Do you want to enter the market?");
+					System.out.println("Hero "+heros.get(i).getName()+", you are in the Heors Nexus. Do you want to enter the market?");
 					System.out.println("Enter Y|y to enter the market. Enter anything else to move on: ");
 
 					Scanner sc = new Scanner(System.in);
@@ -243,7 +243,7 @@ public class LegendsOfValor extends RolePlayingGame {
 		System.out.println("6. Teleport");
 		status = 0;
 		do {
-			System.out.print("Please input the above letter to move: ");
+			System.out.print("Hero "+this.getHeros().get(heroIndex).getName()+", please input the above letter to move: ");
 			str = sc.nextLine();
 
 			// input action is 3||4||5
@@ -301,7 +301,6 @@ public class LegendsOfValor extends RolePlayingGame {
 				} else if (c == 'i') {
 					this.displayHeros();
 				} else if (c == 'b') {
-					System.out.println("adjfhvndhaha");
 					// return back to nexus
 					this.getBoard().getHero(heroIndex).back(this.getBoard(), heroIndex);
 					System.out.println(

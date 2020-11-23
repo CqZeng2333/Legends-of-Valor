@@ -3,7 +3,7 @@ package Equipments;
  * Buyable object in Legends
  * Including weapon, armor, potion and spell. 
  */
-public abstract class BuyableObject {
+public abstract class BuyableObject implements Buyable {
 	private String name;
 	private int cost;
 	private int requiredlevel;
@@ -23,6 +23,7 @@ public abstract class BuyableObject {
 	 * return -2 if no enough level; 
 	 * return -3 if both not enough. 
 	 */
+	@Override
 	public int buyable(int level, int money) {
 		if (level < this.requiredlevel && money < this.cost) return -3;
 		else if (level < this.requiredlevel) return -2;
