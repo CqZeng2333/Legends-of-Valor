@@ -1,7 +1,18 @@
 This project is created by Annan Miao, Chuqian Zeng, Yumiao Zhou and Ziang Leng in November, 2020. 
 
-The original Legends implementation can be extended to LegendsOfValor variant after some changes based on new rules. Therefore we choose Chuqian's design based on the correctness and integrity of the design. Compared with others, the design covers the most complete design of base classes (e.g. Game, RolePlayingGame, BuyableObject class) and interfaces (e.g. Buyable, Buff, Nexus interface). 
+The original Legends implementation can be extended to LegendsOfValor variant after some changes based on new rules. 
+Therefore we choose Chuqian's design based on the correctness and integrity of the design. 
+Compared with others, the design covers the most complete design of base classes. 
+For example, the main components of the game (armor, hero, monster, potion, spell, weapon); 
+most of the secondary components of the game (grid, cell, market); 
+most of the first level of inheritance (LegendsGame inherits from rpg; weapons, armors and potions inherit from BuyableObject); 
+most of the second level of inheritance (every type of monster inherits from the monster class, every type of hero inherits from the hero class); 
+some of the level of abstraction that indicates/enforces the ability of items to be bought and sold (items should somehow implement such an interface). 
 
-During the implementation, we also integrate the design of others. For instance we create a new Avatar base class for heros and monsters.
+During the new implementation, we also integrate the design of others. 
+For instance, we create a new Avatar base class inherited by heros and monsters;
+an abstract Game as the base class inherited by RolePlayingGame; 
+and an interface for the specific abilities to fight. 
+Also we create some new features for the new game, such as Buff interface for the cell for map and Nexus for heroes and monsters. 
 
-After finishing the project we feel that the choice achieve our expectations.
+After finishing the project we feel that the choice achieve our expectations. 
