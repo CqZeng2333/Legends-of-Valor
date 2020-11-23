@@ -10,6 +10,8 @@ Avatars
 ==========================================================
 Avatar is a base abstract class. It has Hero and Monster as subclasses.
 Hero class has 3 kinds of concrete heros as subclasses: Warrior, Sorcerer and Paladin. 
+Hero's skills are listed in "HeroSkillsInterface". In special, for the skill "teleport", when a hero teleports to another lane from home lane, he is not allowed to straightly teleport back unless he uses "back" to go back to his Nexus. 
+
 Monster class has 3 kinds of concrete monsters as subclasses: Dragon, Exoskeleton and Spirit.
 HeroFactory and MonsterFactory classes can read the txt files and create concrete subclasses of heros and monsters.
 
@@ -35,6 +37,7 @@ It also has a detectStatus class to detect status of different types of actions,
 Help files:
 The help files with data are located at Legends_Monsters_and_Heros folder.
 
+==========================================================
 Compile and Run:
 The Main.java is the entrance to run the game. 
 To run the game, open command window, then type "javac Main.java" and "java Main". Then follow the instruction of the game to play.
