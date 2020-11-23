@@ -1,0 +1,7 @@
+This project is created by Annan Miao, Chuqian Zeng, Yumiao Zhou and Ziang Leng in November, 2020. 
+
+The original Legends implementation can be extended to LegendsOfValor variant after some changes based on new rules. Therefore we choose Chuqian's design based on the correctness and integrity of the design. Compared with others, the design covers the most complete design of base classes (e.g. Game, RolePlayingGame, BuyableObject class) and interfaces (e.g. Buyable, Buff, Nexus interface). 
+
+During the implementation, we also integrate the design of others. For instance we create a new Avatar base class for heros and monsters.
+
+After finishing the project we feel that the choice achieve our expectations.
