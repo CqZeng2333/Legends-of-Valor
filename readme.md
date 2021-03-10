@@ -1,1 +1,1 @@
-readme in [Connector](./src/readme.txt)
+readme in [readme](./src/readme.txt)
